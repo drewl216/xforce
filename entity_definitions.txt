@@ -4,24 +4,25 @@
 	type
 	image
 	rot
-	size
-	shape
-	position
-	velocity
+	size (vect)
+	pos
+	vel
+	forces
 	mass
 	shield_max
 	shield_tot
 	shield_regen
 	health
-	armor //(damage reduction)
-	collision
-	collision_movement //- Affected by collision with other objects
+	armor (damage reduction)
+	
+	no_collision
+	no_collision_movement
 	shield_damage
-	armor_pierce //(int)
-	shield_pierce //(int)
+	armor_pierce (int)
+	shield_pierce (int)
 	armor_damage
 	health_damage
-	victory_point_value
+	point_value
 	
 class player extend object
 	owner_id
