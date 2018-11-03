@@ -16,8 +16,8 @@ class PhysicsObj extends Obj
   collide(o2) {
 		o1 = this;
 		var relative_vel_mag = Math.sqrt( Math.pow((o1.vel.x-o2.vel.x), 2) + Math.pow((o1.vel.y-o2.vel.y), 2) );
-		dist = Math.sqrt( Math.pow((o1.x-o2.x), 2) + Math.pow((o1.y-o2.y), 2) );
-		min_dist = o1.diam/2 + o2.diam/2;
+		var dist = Math.sqrt( Math.pow((o1.x-o2.x), 2) + Math.pow((o1.y-o2.y), 2) );
+		var min_dist = o1.diam/2 + o2.diam/2;
 		var over_dist = min_dist-dist;
 		var dist_err = over_dist/min_dist;
     uN = new Victor((o2.x-o1.x), (o2.y-o1.y)).normalize();
@@ -28,21 +28,21 @@ class PhysicsObj extends Obj
 			//clone 'this' into o1 (so we don't change o1's original attributes just yet)
 			var o1 = this.clone();
 			//find center of mass  -  http://hyperphysics.phy-astr.gsu.edu/hbase/cm.html
-			new_mass = (o1.mass+o2.mass);
+			var new_mass = (o1.mass+o2.mass);
 			this.x = (o1.mass*o1.x + o2.mass*o2.x) / new_mass;
 			this.y = (o1.mass*o1.y + o2.mass*o2.y) / new_mass;
 			//find velocities (preserve momentum)
-			total_momentum_i = (o1.mass*o1.vel.x + o2.mass*o2.vel.x);
+			var total_momentum_i = (o1.mass*o1.vel.x + o2.mass*o2.vel.x);
 			this.vel.x = total_momentum_i / new_mass;
-			total_momentum_j = (o1.mass*o1.vel.y + o2.mass*o2.vel.y);
+			var total_momentum_j = (o1.mass*o1.vel.y + o2.mass*o2.vel.y);
 			this.vel.y = total_momentum_j / new_mass;
 			this.mass = new_mass;
 			this.density = o1.density;
-			new_area = new_mass/o1.density;
-			mew_diam = Math.sqrt((new_area/Math.PI))*2;
+			var new_area = new_mass/o1.density;
+			var mew_diam = Math.sqrt((new_area/Math.PI))*2;
 			this.set_diam(mew_diam);
-			o1perc = o1.mass/this.mass;
-			o2perc = o2.mass/this.mass;
+			var o1perc = o1.mass/this.mass;
+			var o2perc = o2.mass/this.mass;
 			this.color.r = o1.color.r*o1perc + o2.color.r*o2perc;
 			this.color.g = o1.color.g*o1perc + o2.color.g*o2perc;
 			this.color.b = o1.color.b*o1perc + o2.color.b*o2perc;

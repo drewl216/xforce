@@ -21,7 +21,7 @@ class Obj
 		this.rot_vel = 0; //Victor(0,-1); TODO - add angular momemtum to objects/collisions
 
 		this.is_visible = true;
-		this.color = {r:0, g:0, b:255};
+		this.color = {r:255, g:255, b:255};
 }
 
 
@@ -32,10 +32,10 @@ class Obj
 		@param float xmin the min x coordnate
 		@param float ymin the min y coordnate
 	*/
-	positionRandomly(xmax,ymax,xmin=0,ymin=0)
+	positionRandomly(xmin,ymin,xmax,ymax)
 	{
-		this.x = Util.rand(xmin,xmax*2/3)+xmax/6;
-		this.y = Util.rand(ymin,ymax*2/3)+ymax/6;
+		this.x = Util.rand(xmin,xmax);
+		this.y = Util.rand(ymin,ymax);
 	}
 
 	draw() {}
