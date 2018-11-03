@@ -4,7 +4,7 @@ class ship extends xobj
     super();
   }
 
-  Draw(){
+  draw(){
     context.save(); // saves the coordinate system
     context.translate(this.x,this.y); // now the position (0,0) is found at (250,50)
     context.rotate(this.rot.angle() + Math.PI/2.0);  // rotate around the start point of your line
@@ -29,7 +29,6 @@ class ship extends xobj
     context.lineWidth = 1;
     context.strokeStyle = 'rgb('+Math.round(100)+','+Math.round(100)+','+Math.round(100)+')';//'#000000';  - The line arround the object
     context.stroke();
-
 
     context.restore(); // restores the coordinate system back to (0,0)
   }
