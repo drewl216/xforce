@@ -13,10 +13,12 @@ class Obj
 		this.rot = Victor(0,-1);
 		this.rot_vel = 0; //Victor(0,-1); TODO - add angular momemtum to objects/collisions
 
+		this.is_visible = true;
 		this.color = {r:0, g:0, b:255};
 }
 
 
 	draw() {}
 	clone() { return Object.assign({}, this); }
+	destroy() {}
 } //end xobj class

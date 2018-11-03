@@ -1,4 +1,4 @@
-class ship extends PhysicsObj
+class Ship extends PhysicsObj
 {
   constructor(){
     super();
