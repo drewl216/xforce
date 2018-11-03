@@ -21,4 +21,34 @@ class Obj
 	draw() {}
 	clone() { return Object.assign({}, this); }
 	destroy() {}
+
+	toJson()
+	{
+		return JSON.stringify(this);
+	}
+
+
+	/**
+		create from a json version
+		@param string json_str a json encoded xobj
+	*/
+	static fromJson(json_str)
+	{
+		var object_parsed = JSON.parse(json_str);
+		var obj = new xobj();
+		for (var prop in object_parsed) {
+			if (obj.hasOwnProperty(prop)) {
+			obj[prop] = object_parsed[prop];}
+		}
+		return obj;
+	}
+
+
 } //end xobj class
+
+/**
+	allow the code to be loaded in either the browser or nodejs
+*/
+typeof module=== 'undefined'? '': (function(exports){
+   module.exports=xobj;
+});
