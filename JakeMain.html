@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<base href="" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XForce</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width">
+
+
+<link rel="stylesheet" href="js/jquery/jquery-ui.min.css">
+<script src="js/jquery/jquery-3.3.1.min.js"></script>
+<script src="js/jquery/jquery-ui.min.js"></script>
+
+<script src="js/victor.js"></script>
+<script src="js/obj.js"></script>
+<script src="js/ship.js"></script>
+<script src="js/player.js"></script>
+<script src="js/JakeTemp.js"></script>
+
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/ships.css">
+<link rel="stylesheet" href="css/weapons.css">
+
+</head>
+<body>
+
+
+<div id='canvasWrapper' style='width:1024px; height: 768px; overflow: hidden;'>
+	<canvas id="myCanvas" width="1200" height="1200"></canvas>
+</div>
+
+
+<script>
+//KEY VARS
+var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40;
+var keystate = [];
+
+//MOVEMENT & FIRING
+var ROTATE_SPEED = 1.5;
+var FORWARD_ACCEL = 100;
+var BAKUP_SPEED = 5;
+var BULLET_SPEED = 500;
+var BULLET_MASS = 1;
+var RATE_OF_FIRE_MS = 100;
+
+//VARIABLES
+var game_state = 'play';
+var clear_each_frame=true;
+var fade_each_frame=false;
+
+var start_time = Date.now();
+var loop_time_ms = 4;
+var step_size = .005; //fraction of a second computed each step, step size "1" equals 1 full second per step (very jerky and inacurate)
+var draw_once_per_n_steps = 5;
+var step_cnt = 0;
+var full_cnt = 0;
+var frame_cnt = 0;
+var frame_cnt_timer = Date.now()+1000;
+var frame_cnt_per_second = 0;
+
+var xmax=$(window).width();
+var ymax=$(window).height();
+
+var grav_const = 1000.00;
+
+var do_edge_bounce = true;
+var level_edge = {x:2000,y:1000}; // level will be twice this size (+ and -)
+
+var canvas_mouse_pos = {x:0,y:0};
+var cursor_show_coordinates = true;
+
+
+
+//STORE ALL OBJECTS
+var objarr = [];
+var players = [];
+
+var num_rand_planets = 20;
+
+//CREATE THE CANVAS OBJECT
+var canvas=document.getElementById("myCanvas");
+var context=canvas.getContext("2d");
+
+
+//ADD ALL OTHER OBJECTS
+for(var n=0; n<num_rand_planets; n++) {
+	obj = new Obj();
+	obj.mass=100;
+	obj.index = objarr.push(obj) - 1;
+}
+
+
+
+
+//DRAW EACH OBJECT
+for(var i=0; i<objarr.length; i++) {
+  //DRAW EACH POINT
+  obj = objarr[i];
+  if(!obj || obj.disabled) continue; //this point no longer exists
+  obj.Draw();
+}
+
+
+
+
+</script>
+
+
+
+
+
+
+</body>
