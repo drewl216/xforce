@@ -40,7 +40,7 @@
 
 <script>
 //KEY VARS
-var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40;
+var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40, FIREKEY = 32;
 var keystate = [];
 
 //NEW
@@ -84,7 +84,7 @@ var cursor_show_coordinates = true;
 var objarr = [];
 var players = [];
 
-var num_rand_planets = 0;
+var num_rand_planets = 300;
 
 //CREATE THE CANVAS OBJECT
 var canvas=document.getElementById("myCanvas");
@@ -205,7 +205,8 @@ function sim_step() {
 		if(keystate[LEFTKEY]) pobj.rot.rotate(-1*ROTATE_SPEED*step_size);
 		if(keystate[RIGHTKEY]) pobj.rot.rotate(1*ROTATE_SPEED*step_size);
 		if(keystate[UPKEY]) { pobj.vel.x += pobj.rot.x*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*FORWARD_ACCEL*step_size; }
-		if(keystate[DOWNKEY]) {
+		if(keystate[DOWNKEY]) { pobj.vel.x += pobj.rot.x*-1*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*-1*FORWARD_ACCEL*step_size; }
+		if(keystate[FIREKEY]) {
 
 			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
 				pobj.last_fire_time = Date.now();
@@ -329,6 +330,8 @@ function sim_draw() {
 	//var wrapper = document.getElementById('canvasWrapper');
 	screen_pos_x = player1_obj.x - Math.round(xmax/2);
 	screen_pos_y = player1_obj.y - Math.round(ymax/2);
+	screen_max_x = screen_pos_x + xmax;
+	screen_max_y = screen_pos_y + ymax;
 	//wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
 	//wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
 
@@ -371,6 +374,11 @@ function sim_draw() {
 		//DRAW EACH POINT
 		obj = objarr[i];
 		if(!obj || obj.disabled) continue; //this point no longer exists
+		var objright = obj.x+obj.diam/2;
+		var objleft = obj.x-obj.diam/2;
+		var objtop = obj.y+obj.diam/2;
+		var objbot = obj.y-obj.diam/2;
+		if(objright<screen_pos_x || objleft > screen_max_x || objtop>screen_max_y || objbot < screen_pos_y) continue; //if the objects are outside the visible screen don't draw them.
 		obj.draw();
 	}
 
