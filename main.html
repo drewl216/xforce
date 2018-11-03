@@ -22,6 +22,7 @@
 <script src="js/bullet.js"></script>
 
 <script src="js/player.js"></script>
+<script src="js/util.js"></script>
 
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/ships.css">
@@ -382,16 +383,6 @@ function sim_draw() {
 
 	return true;
 }
-
-
-
-
-
-function myrand(min,max){
-	range = max-min+1;
-	return Math.floor(Math.random() * range) + min;
-}
-
 
 function getCanvasMousePos(e) {
   var rect = canvas.getBoundingClientRect();
