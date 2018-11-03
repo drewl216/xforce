@@ -5,8 +5,8 @@ class Obj
 	{
 		this.id = 0;
 
-		this.x = myrand(0,xmax*2/3)+xmax/6;
-		this.y = myrand(0,ymax*2/3)+ymax/6;
+		this.x = Util.rand(0,xmax*2/3)+xmax/6;
+		this.y = Util.rand(0,ymax*2/3)+ymax/6;
 
 		this.pos = Victor(0,0);
 		this.vel = Victor(0,0);
