@@ -48,6 +48,7 @@ class ship extend object
 	control_scheme //- Method of movement (rotate and propel, vs directional)
 //	value
 	Description
+	scanner_range
 
 //class Projectile
 	control (boolean)
