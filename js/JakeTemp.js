@@ -1,25 +1,37 @@
-class obj { //basic object to draw
-  this.id = 0000; //unique identifier
-  this.name = "default object"; //not necesarily unique
-  this.visible = true; //draw or not
+class Obj { //basic object to draw
+  constructor(){
+    this.id = 0;
+    this.name = "default object"; //not necesarily unique
+    this.visible = true; //draw or not
+  }
+}
 
-  this.draw = function() {}
+class PhysicsObj extends DrawObj { //physics applies to objects
+  constructor() {
+    this.name = "default physics object"; //not necesarily unique
+
+    this.mass = 100; //mass in kg
+
+    this.location = Victor(0,0)
+    this.netForce = Victor(0,0);
+  	this.velocity = Victor(0,0);
+  	this.angularVelocity = Victor(0,-1);
+
+    this.calculateGravity = true;
+  }
+
+  function clone(){
+    return Object.assign({}, this);
+  }
+
+  function collide(o2){}; //collision with object o2
 }
 
 
-class PhysicsObj extends obj { //physics applies to objects
-  this.mass = 100; //mass in kg
+class Ship extends PhysicsObj{ //basic ship object
+  constructor(){
+    this.name = "default ship"; //not necesarily unique
 
-  this.location = Victor(0,0)
-  this.netForce = Victor(0,0);
-	this.velocity = Victor(0,0);
-	this.angularVelocity = Victor(0,-1);
-
-  this.clone = function() { return Object.assign({}, this); };
-  this.collide = function(o2) {}; //collision with object o2
-}
-
-
-class Ship extends PhysicsObj { //basic ship object
-  this.thrustPower = 100; //force in Newtons
+    this.thrustPower = 100; //force in Newtons
+  }
 }
