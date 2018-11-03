@@ -1,4 +1,4 @@
-class Bullet extends PhysicsObj
+class Projectile extends PhysicsObj
 {
   constructor(){
     super();
