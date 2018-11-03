@@ -207,13 +207,11 @@ function sim_step() {
 			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
 				pobj.last_fire_time = Date.now();
 				obj = new Bullet();
-				obj.type='bullet';
 				obj.x = pobj.x + pobj.rot.x*(pobj.diam+10);
 				obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
 				obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
 				obj.vel.y = pobj.vel.y + pobj.rot.y*BULLET_SPEED;
 				obj.mass = BULLET_MASS;
-				obj.color = {r:pobj.color.r, g:pobj.color.g, b:pobj.color.b};
 				objarr.push(obj);
 
 				//accelerate backwards
