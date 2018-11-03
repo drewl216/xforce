@@ -40,7 +40,7 @@
 
 <script>
 //KEY VARS
-var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40;
+var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40, FIREKEY = 32;
 var keystate = [];
 
 //NEW
@@ -204,7 +204,8 @@ function sim_step() {
 		if(keystate[LEFTKEY]) pobj.rot.rotate(-1*ROTATE_SPEED*step_size);
 		if(keystate[RIGHTKEY]) pobj.rot.rotate(1*ROTATE_SPEED*step_size);
 		if(keystate[UPKEY]) { pobj.vel.x += pobj.rot.x*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*FORWARD_ACCEL*step_size; }
-		if(keystate[DOWNKEY]) {
+		if(keystate[DOWNKEY]) { pobj.vel.x += pobj.rot.x*-1*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*-1*FORWARD_ACCEL*step_size; }
+		if(keystate[FIREKEY]) {
 
 			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
 				pobj.last_fire_time = Date.now();
