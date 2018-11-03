@@ -1,3 +1,9 @@
+/**
+	imports required for use on nodejs server
+*/
+if (typeof module !== 'undefined') {
+	Util = require("../js/util.js");
+};
 
 class Obj
 {
@@ -6,6 +12,7 @@ class Obj
 		this.id = 0;
 
 		this.x = Util.rand(0,xmax*2/3)+xmax/6;
+		console.log(xmax);
 		this.y = Util.rand(0,ymax*2/3)+ymax/6;
 
 		this.pos = Victor(0,0);
@@ -50,9 +57,12 @@ class Obj
 
 } //end xobj class
 
+
+
 /**
 	allow the code to be loaded in either the browser or nodejs
 */
 if (typeof module !== 'undefined') {
 	module.exports=Obj;
 };
+
