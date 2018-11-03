@@ -147,7 +147,7 @@ class xobj
 			//if rolling back a full step won't help then forcibly move them apart on their normal vector (they're probably stuck on eachother)
 			var newdist = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
 			if(newdist < min_dist) { //they're still collided even after backing up a step
-				console.log("pull appart : "+relative_vel_mag);
+				//console.log("pull appart : "+relative_vel_mag);
 				var o1_mass_perc = o1.mass/(o1.mass+o2.mass);
 				var o2_mass_perc = o2.mass/(o2.mass+o1.mass);
 				//console.log("m1"+o1.mass+"("+o1_mass_perc+")   m2"+o2.mass+"("+o2_mass_perc+")");
@@ -179,7 +179,7 @@ class xobj
 
 						var newdist = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
 
-						if(scnt>1000) { console.log('BREAK! Ran #'+scnt+' resolution:'+resolution + ' dist:'+newdist  ); break; }
+						if(scnt>1000) { /*console.log('BREAK! Ran #'+scnt+' resolution:'+resolution + ' dist:'+newdist  );*/ break; }
 						if(newdist <= min_dist) { //we collided
 							//go back to last non-collision value
 							x1 = x1_last; y1 = y1_last;
