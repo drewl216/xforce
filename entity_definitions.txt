@@ -3,6 +3,7 @@
 	playerid
 	type
 	image
+	rot
 	size
 	shape
 	position
@@ -22,13 +23,19 @@
 	health_damage
 	victory_point_value
 	
-	
-	
+//class player extend object
+//	owner_id
+	active_unit_id
+	view_loc
+	score
+	status (alive, auto, dead)
+	death_time
+	spawn_time	
 	
 //class ship extend object
 //	shiptype
 //	thrust
-	rotation_speed
+	rot_speed
 //	equipped weapons (array) 
 //	?MaxSpeed
 //	?Occupants
@@ -40,28 +47,33 @@
 //	Value
 	Description
 
-//class player extend object
-//	owner_id
+//class Projectile
+	control (boolean)
+	time
+
+//class Explosion
+	name
+	radius
+	radial_force
+	radial_damage
+	particle_qty
+	particle_size	
 
 
-class match
-	win_condition (kills, elimination, points, capture, base_destroy)
-	teams
-	players
-	player_qty
-	
-class WinCondition
-	
-	
-	
 	
 	class world
 		obj_array
 		start_array
 		players_array
 		ships_array
-	
+		win_condition (kills, elimination, points, capture, base_destroy)
+		teams
+		players
+		player_qty
+		respawn_timer
 
+class WinCondition
+		
 //class weapon
 	name
 	fire_rate_ms
@@ -77,18 +89,7 @@ class WinCondition
 	noticeability_modifier
 	ammunition
 
-	
-//class Projectile
-	control (boolean)
-	time
 
-//class Explosion
-	name
-	radius
-	radial_force
-	radial_damage
-	particle_qty
-	particle_size
 
 	
 	
