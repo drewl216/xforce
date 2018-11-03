@@ -84,7 +84,7 @@ var cursor_show_coordinates = true;
 var objarr = [];
 var players = [];
 
-var num_rand_planets = 300;
+var num_rand_planets = 30;
 
 //CREATE THE CANVAS OBJECT
 var canvas=document.getElementById("myCanvas");
@@ -143,16 +143,14 @@ obj.index = objarr.push(obj) - 1;
 //ADD ALL OTHER OBJECTS
 for(var n=0; n<num_rand_planets; n++) {
 	obj = new Asteroid();
-	obj.positionRandomly(xmax,ymax);
-	obj.mass=100;
+	obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
 	obj.index = objarr.push(obj) - 1;
 }
 
 obj = new Ship();
 obj.type='player';
 obj.immobile=false;
-obj.x=xmax-100;
-obj.y=ymax-100;
+obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
 obj.mass = 100;
 obj.density = 0;
 obj.color = {r:0, g:100, b:200};
@@ -233,7 +231,7 @@ function sim_step() {
 	{
 		p1 = objarr[i];
 		if(!p1 || p1.disabled) continue; //this object no longer exists
-		if(p1.type=='bullet' && (Math.abs(p1.vel.x)+Math.abs(p1.vel.y)) < BULLET_SPEED*.8) { delete(objarr[i]); continue; }
+//		if(p1.type=='bullet' && (Math.abs(p1.vel.x)+Math.abs(p1.vel.y)) < BULLET_SPEED*.8) { delete(objarr[i]); continue; }
 
 		for(var j=i+1; j<objarr.length; j++)
 		{
@@ -242,7 +240,7 @@ function sim_step() {
 			if(p1.type=='bullet' && p2.type=='bullet') continue; //they're both bullets
 
 			//remove old/slow bullets (they also get removed if they leave the screen)
-			if(p2.type=='bullet' && (Math.abs(p2.vel.x)+Math.abs(p2.vel.y)) < BULLET_SPEED*.8) { delete(objarr[j]); continue; }
+//		if(p2.type=='bullet' && (Math.abs(p2.vel.x)+Math.abs(p2.vel.y)) < BULLET_SPEED*.8) { delete(objarr[j]); continue; }
 
 			dist = Math.sqrt( Math.pow((p1.x-p2.x), 2) + Math.pow((p1.y-p2.y), 2) );
 			min_dist = p1.diam/2 + p2.diam/2; //objects can't possibly be closer than this
@@ -376,8 +374,8 @@ function sim_draw() {
 		if(!obj || obj.disabled) continue; //this point no longer exists
 		var objright = obj.x+obj.diam/2;
 		var objleft = obj.x-obj.diam/2;
-		var objtop = obj.y+obj.diam/2;
-		var objbot = obj.y-obj.diam/2;
+		var objtop = obj.y-obj.diam/2;
+		var objbot = obj.y+obj.diam/2;
 		if(objright<screen_pos_x || objleft > screen_max_x || objtop>screen_max_y || objbot < screen_pos_y) continue; //if the objects are outside the visible screen don't draw them.
 		obj.draw();
 	}
