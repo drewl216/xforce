@@ -9,13 +9,14 @@
 <meta name="viewport" content="width=device-width">
 
 
-<link rel="stylesheet" href="js/jquery-ui.min.css">
+<link rel="stylesheet" href="js/jquery/jquery-ui.min.css">
 <script src="js/jquery/jquery-3.3.1.min.js"></script>
 <script src="js/jquery/jquery-ui.min.js"></script>
 
 <script src="js/victor.js"></script>
 <script src="js/obj.js"></script>
 <script src="js/ship.js"></script>
+<script src="js/asteroid.js"></script>
 <script src="js/player.js"></script>
 
 <link rel="stylesheet" href="css/main.css">
@@ -57,7 +58,7 @@ var step_cnt = 0;
 var full_cnt = 0;
 var frame_cnt = 0;
 var frame_cnt_timer = Date.now()+1000;
-var frame_cnt_per_second = 0;
+var frame_cnt_per_second = 110;
 
 var xmax=$(window).width();
 var ymax=$(window).height();
@@ -134,12 +135,12 @@ obj.index = objarr.push(obj) - 1;
 
 //ADD ALL OTHER OBJECTS
 for(var n=0; n<num_rand_planets; n++) {
-	obj = new xobj();
+	obj = new asteroid();
 	obj.mass=100;
 	obj.index = objarr.push(obj) - 1;
 }
 
-obj = new xobj();
+obj = new ship();
 obj.type='player';
 obj.immobile=false;
 obj.x=xmax-100;
