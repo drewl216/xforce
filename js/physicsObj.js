@@ -1,4 +1,4 @@
-class PhysicsObj extends xobj
+class PhysicsObj extends Obj
 {
   constructor(){
     super();
