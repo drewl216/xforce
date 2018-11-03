@@ -1,5 +1,5 @@
 
-class xobj
+class Obj
 {
 	constructor()
 	{
