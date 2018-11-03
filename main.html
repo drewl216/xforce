@@ -16,6 +16,7 @@
 <script src="js/victor.js"></script>
 <script src="js/obj.js"></script>
 <script src="js/ship.js"></script>
+<script src="js/asteroid.js"></script>
 <script src="js/player.js"></script>
 
 <link rel="stylesheet" href="css/main.css">
@@ -134,7 +135,7 @@ obj.index = objarr.push(obj) - 1;
 
 //ADD ALL OTHER OBJECTS
 for(var n=0; n<num_rand_planets; n++) {
-	obj = new xobj();
+	obj = new asteroid();
 	obj.mass=100;
 	obj.index = objarr.push(obj) - 1;
 }
