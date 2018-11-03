@@ -30,8 +30,7 @@
 
 </head>
 <body>
-<!--NEW-->
-<img src = "images/bg/star_bg.jpg" id="bg" style="display:none;" />
+
 
 <div id='canvasWrapper' style='width:1024px; height: 768px; overflow: hidden;'>
 	<canvas id="myCanvas" width="1200" height="1200"></canvas>
@@ -43,8 +42,6 @@
 var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40;
 var keystate = [];
 
-//NEW
-var background = document.getElementById('bg');
 //MOVEMENT & FIRING
 var ROTATE_SPEED = 1.5;
 var FORWARD_ACCEL = 100;
@@ -84,7 +81,7 @@ var cursor_show_coordinates = true;
 var objarr = [];
 var players = [];
 
-var num_rand_planets = 0;
+var num_rand_planets = 20;
 
 //CREATE THE CANVAS OBJECT
 var canvas=document.getElementById("myCanvas");
@@ -331,6 +328,9 @@ function sim_draw() {
 	//wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
 	//wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
 
+	//save the default transformation matrix
+	context.save(); //push()
+
 	//CLEAR OLD
 	if(clear_each_frame) context.clearRect(0, 0, canvas.width, canvas.height);
 	if(fade_each_frame) {
@@ -339,15 +339,7 @@ function sim_draw() {
 		context.shadowColor = '#FFFFFF';
 		context.fillRect(0, 0, canvas.width, canvas.height);
 		context.stroke();
-	}	//save the default transformation matrix
-
-
-	
-	
-	context.save(); //push()
-
-
-  
+	}
 
 	//TRANSLATE BY USER POSIITON
 	context.translate(-screen_pos_x, -screen_pos_y);
@@ -357,12 +349,8 @@ function sim_draw() {
 	context.beginPath();
 	context.lineWidth="6";
 	context.rect(-level_edge.x, -level_edge.y, level_edge.x*2, level_edge.y*2);
-	context.drawImage(background,-level_edge.x-(.5*canvas.width),-level_edge.y-(.5*canvas.height), level_edge.x*2+canvas.width,level_edge.y*2+canvas.height);
- context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
+  context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
   context.stroke();
-  
-
-
 
 
 	//DRAW EACH OBJECT
@@ -375,7 +363,7 @@ function sim_draw() {
 
 	context.restore(); //pop()
 
-    
+
 	//SHOW COORDINATES
 	if(cursor_show_coordinates) {
 	  context.font = '10pt Calibri';
