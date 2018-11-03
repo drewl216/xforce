@@ -10,7 +10,7 @@ class Util
 /**
 	allow the code to be loaded in either the browser or nodejs
 */
-typeof module=== 'undefined'? '': (function(exports){
-   module.exports=xobj;
-});
+if (typeof module !== 'undefined') {
+	module.exports=Util;
+};
 
