@@ -1,18 +1,6 @@
-LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40, FIREKEY = 32;
-var keystate = [];
-
 class World
 {
   constructor(){
-
-    this.start_time = Date.now();
-
-    this.objarr = [];
-    this.players = [];
-
-    this.screen_pos_x = 0;
-    this.screen_pos_y = 0;
-
     this.load_world_objects();
 
   }
@@ -20,12 +8,13 @@ class World
   load_world_objects(){
     //ADD ALL OTHER OBJECTS
     for(var n=0; n<num_rand_planets; n++) {
-    	obj = new Asteroid();
+    	var obj = new Asteroid();
+    	obj.positionRandomly(xmax,ymax);
     	obj.mass=100;
     	obj.index = objarr.push(obj) - 1;
     }
 
-    obj = new Ship();
+    var obj = new Ship();
     obj.type='player';
     obj.immobile=false;
     obj.x=xmax-100;
@@ -36,14 +25,13 @@ class World
     obj.diam = 20;
     obj.index = objarr.push(obj) - 1;
     player1_obj = objarr[obj.index];
-    this.players.push(obj.index);
+    players.push(obj.index);
   }
 
   start_sim() {
   	this.sim_draw();
   	this.run_sim_step_loop();
   }
-
 
   run_sim_step_loop() {
   	step_cnt++;
@@ -64,6 +52,8 @@ class World
   sim_step() {
   	//APPLY MOVEMENT FORCES TO PLAYERS
   	for(var i=0; i<players.length; i++) {
+  		var oid = players[i];
+  		var pobj = objarr[oid];
 
   		if(keystate[LEFTKEY]) pobj.rot.rotate(-1*ROTATE_SPEED*step_size);
   		if(keystate[RIGHTKEY]) pobj.rot.rotate(1*ROTATE_SPEED*step_size);
@@ -73,7 +63,7 @@ class World
 
   			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
   				pobj.last_fire_time = Date.now();
-  				obj = new Bullet();
+  				var obj = new Bullet();
   				obj.x = pobj.x + pobj.rot.x*(pobj.diam+10);
   				obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
   				obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
@@ -124,36 +114,36 @@ class World
     //APPLY GRAVITY & OTHHER FORCES
   	for(var i=0; i<objarr.length; i++)
   	{
-  		p1 = objarr[i];
+  		var p1 = objarr[i];
   		if(!p1 || p1.disabled) continue; //this object no longer exists
   		for(var j=i+1; j<objarr.length; j++)
   		{
-  			p2 = objarr[j];
+  			var p2 = objarr[j];
   			if(!p2 || p2.disabled) continue; //this object no longer exists
   			if(p1.type=='bullet' && p2.type=='bullet') continue; //they're both bullets
 
-  			dist = Math.sqrt( Math.pow((p1.x-p2.x), 2) + Math.pow((p1.y-p2.y), 2) );
-  			min_dist = p1.diam/2 + p2.diam/2; //objects can't possibly be closer than this
-  			use_dist = dist<min_dist? min_dist:dist;
-  			is_touching = ((dist - (p1.diam/2) - (p2.diam/2)) <= 0);
+  			var dist = Math.sqrt( Math.pow((p1.x-p2.x), 2) + Math.pow((p1.y-p2.y), 2) );
+  			var min_dist = p1.diam/2 + p2.diam/2; //objects can't possibly be closer than this
+  			var use_dist = dist<min_dist? min_dist:dist;
+  			var is_touching = ((dist - (p1.diam/2) - (p2.diam/2)) <= 0);
 
   			//COMPUTE UNIT VECTORS (from each object's center of mass)
   			var uvect_i = (p2.x-p1.x)/dist; //unit vector in direction of pull
   			var uvect_j = (p2.y-p1.y)/dist;
-        var grav_force = 0;
 
   			//CALCULATE GRAVITY FORCES
+        var grav_force = 0;
   			if(p1.no_gravity || p2.no_gravity) grav_force=0;
-
   			else { grav_force = grav_const*p2.mass*p1.mass / Math.pow(use_dist,2); }
 
+        var total_force = 0;
   			if(!p1.immobile) {
-  				var total_force = (p1.no_gravity_movement? 0:grav_force);
+  				total_force = (p1.no_gravity_movement? 0:grav_force);
   				p1.vel.x += (uvect_i*total_force) / p1.mass * step_size;
   				p1.vel.y += (uvect_j*total_force) / p1.mass * step_size;
   			}
   			if(!p2.immobile) {
-  				var total_force = (p2.no_gravity_movement? 0:grav_force);
+  				total_force = (p2.no_gravity_movement? 0:grav_force);
   				//if(Math.abs(total_force) > .00001) {
   				p2.vel.x -= (uvect_i*total_force) / p2.mass * step_size;
   				p2.vel.y -= (uvect_j*total_force) / p2.mass * step_size;
@@ -189,8 +179,8 @@ class World
   sim_draw() {
   	//scroll to new player position
   	//var wrapper = document.getElementById('canvasWrapper');
-  	this.screen_pos_x = player1_obj.x - Math.round(xmax/2);
-  	this.screen_pos_y = player1_obj.y - Math.round(ymax/2);
+  	screen_pos_x = player1_obj.x - Math.round(xmax/2);
+  	screen_pos_y = player1_obj.y - Math.round(ymax/2);
   	//wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
   	//wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
 
@@ -208,7 +198,7 @@ class World
   	}
 
   	//TRANSLATE BY USER POSIITON
-  	context.translate(-this.screen_pos_x, -this.screen_pos_y);
+  	context.translate(-screen_pos_x, -screen_pos_y);
 
 
   	//DRAW EDGE OF LEVEL
@@ -222,7 +212,7 @@ class World
   	//DRAW EACH OBJECT
   	for(var i=0; i<objarr.length; i++) {
   		//DRAW EACH POINT
-  		obj = objarr[i];
+  		var obj = objarr[i];
   		if(!obj || obj.disabled) continue; //this point no longer exists
   		obj.draw();
   	}

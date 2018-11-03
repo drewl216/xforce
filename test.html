@@ -16,10 +16,9 @@
 <script src="js/victor.js"></script>
 
 <script src="js/obj.js"></script>
-<script src="js/physicsObj.js"></script>
 <script src="js/ship.js"></script>
 <script src="js/asteroid.js"></script>
-<script src="js/bullet.js"></script>
+<script src="js/projectile.js"></script>
 <script src="js/world.js"></script>
 
 <script src="js/player.js"></script>
@@ -91,6 +90,9 @@ var num_rand_planets = 300;
 var canvas=document.getElementById("myCanvas");
 var context=canvas.getContext("2d");
 
+var player1_obj = null;
+var screen_pos_x = null;
+var screen_pos_y = null;
 
 /*******************
 ADD OBJECTS TO FIELD
@@ -142,25 +144,7 @@ obj.index = objarr.push(obj) - 1;
 
 
 //ADD ALL OTHER OBJECTS
-for(var n=0; n<num_rand_planets; n++) {
-	obj = new Asteroid();
-	obj.positionRandomly(xmax,ymax);
-	obj.mass=100;
-	obj.index = objarr.push(obj) - 1;
-}
 
-obj = new Ship();
-obj.type='player';
-obj.immobile=false;
-obj.x=xmax-100;
-obj.y=ymax-100;
-obj.mass = 100;
-obj.density = 0;
-obj.color = {r:0, g:100, b:200};
-obj.diam = 20;
-obj.index = objarr.push(obj) - 1;
-player1_obj = objarr[obj.index];
-players.push(obj.index);
 
 
 
