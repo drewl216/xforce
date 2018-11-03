@@ -3,6 +3,7 @@
 */
 if (typeof module !== 'undefined') {
 	Util = require("../js/util.js");
+	Victor = require("../js/victor.min.js");
 };
 
 class Obj
@@ -14,9 +15,9 @@ class Obj
 		this.x=0;
 		this.y=0;
 
-		this.pos = Victor(0,0);
-		this.vel = Victor(0,0);
-		this.rot = Victor(0,-1);
+		this.pos = new Victor(0,0);
+		this.vel = new Victor(0,0);
+		this.rot = new Victor(0,-1);
 		this.rot_vel = 0; //Victor(0,-1); TODO - add angular momemtum to objects/collisions
 
 		this.is_visible = true;

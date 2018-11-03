@@ -3,6 +3,9 @@
 
 <html>
 	<head>
+		<script type="text/javascript" src="js/obj.js">
+		</script>
+			
 		<script type = "text/javascript">
 			function WebSocketTest() {
 				
@@ -19,8 +22,11 @@
 					};
 				
 					ws.onmessage = function (evt) { 
-						var received_msg = evt.data;
-						alert("Message is received...");
+						var encoded = JSON.parse(evt);
+						var objs;
+						for (var i=0;i<encoded.length;i++) {
+							objs.push(xobj.fromJson(encoded));
+						}
 					};
 				
 					ws.onclose = function() { 

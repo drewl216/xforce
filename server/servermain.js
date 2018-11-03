@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const WebSocket = require('./ws/index.js');
-const Obsj = require('../js/obj.js');
+const Obj = require('../js/obj.js');
 
 
 
@@ -26,11 +26,26 @@ const wss = new WebSocket.Server({
 	 }
 });
 
+console.log(Obj);
+
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
   });
 
-  ws.send('something');
+
+
+	var objs = Array();
+	objs.push(new Obj());
+	objs.push(new Obj());
+
+	var json_objs = Array();
+
+	for (var i=0;i<objs.length;i++) {
+		json_objs.push(objs[i].toJson());
+	}
+
+	var encoded = JSON.stringify(json_objs);
+	ws.send(encoded);
 });
 
