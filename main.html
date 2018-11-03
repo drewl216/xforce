@@ -14,9 +14,13 @@
 <script src="js/jquery/jquery-ui.min.js"></script>
 
 <script src="js/victor.js"></script>
+
 <script src="js/obj.js"></script>
+<script src="js/physicsObj.js"></script>
 <script src="js/ship.js"></script>
 <script src="js/asteroid.js"></script>
+<script src="js/bullet.js"></script>
+
 <script src="js/player.js"></script>
 
 <link rel="stylesheet" href="css/main.css">
@@ -201,7 +205,7 @@ function sim_step() {
 
 			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
 				pobj.last_fire_time = Date.now();
-				obj = new xobj();
+				obj = new bullet();
 				obj.type='bullet';
 				obj.x = pobj.x + pobj.rot.x*(pobj.diam+10);
 				obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
