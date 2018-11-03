@@ -19,7 +19,7 @@
 <script src="js/physicsObj.js"></script>
 <script src="js/ship.js"></script>
 <script src="js/asteroid.js"></script>
-<script src="js/bullet.js"></script>
+<script src="js/projectile.js"></script>
 
 <script src="js/player.js"></script>
 <script src="js/util.js"></script>
@@ -210,7 +210,7 @@ function sim_step() {
 
 			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
 				pobj.last_fire_time = Date.now();
-				obj = new Bullet();
+				obj = new Projectile();
 				obj.x = pobj.x + pobj.rot.x*(pobj.diam+10);
 				obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
 				obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
@@ -346,12 +346,12 @@ function sim_draw() {
 	}	//save the default transformation matrix
 
 
-	
-	
+
+
 	context.save(); //push()
 
 
-  
+
 
 	//TRANSLATE BY USER POSIITON
 	context.translate(-screen_pos_x, -screen_pos_y);
@@ -364,7 +364,7 @@ function sim_draw() {
 	context.drawImage(background,-level_edge.x-(.5*canvas.width),-level_edge.y-(.5*canvas.height), level_edge.x*2+canvas.width,level_edge.y*2+canvas.height);
  context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
   context.stroke();
-  
+
 
 
 
@@ -384,7 +384,7 @@ function sim_draw() {
 
 	context.restore(); //pop()
 
-    
+
 	//SHOW COORDINATES
 	if(cursor_show_coordinates) {
 	  context.font = '10pt Calibri';

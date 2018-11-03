@@ -57,7 +57,7 @@ class World
   				if(!parent_this.sim_draw()) return false;
   			}
   		}
-      this.run_sim_step_loop();
+      parent_this.run_sim_step_loop();
   	}, loop_time_ms, this);
   }
 
@@ -138,20 +138,22 @@ class World
   			is_touching = ((dist - (p1.diam/2) - (p2.diam/2)) <= 0);
 
   			//COMPUTE UNIT VECTORS (from each object's center of mass)
-  			uvect_i = (p2.x-p1.x)/dist; //unit vector in direction of pull
-  			uvect_j = (p2.y-p1.y)/dist;
+  			var uvect_i = (p2.x-p1.x)/dist; //unit vector in direction of pull
+  			var uvect_j = (p2.y-p1.y)/dist;
+        var grav_force = 0;
 
   			//CALCULATE GRAVITY FORCES
   			if(p1.no_gravity || p2.no_gravity) grav_force=0;
+
   			else { grav_force = grav_const*p2.mass*p1.mass / Math.pow(use_dist,2); }
 
   			if(!p1.immobile) {
-  				total_force = (p1.no_gravity_movement? 0:grav_force);
+  				var total_force = (p1.no_gravity_movement? 0:grav_force);
   				p1.vel.x += (uvect_i*total_force) / p1.mass * step_size;
   				p1.vel.y += (uvect_j*total_force) / p1.mass * step_size;
   			}
   			if(!p2.immobile) {
-  				total_force = (p2.no_gravity_movement? 0:grav_force);
+  				var total_force = (p2.no_gravity_movement? 0:grav_force);
   				//if(Math.abs(total_force) > .00001) {
   				p2.vel.x -= (uvect_i*total_force) / p2.mass * step_size;
   				p2.vel.y -= (uvect_j*total_force) / p2.mass * step_size;
@@ -164,13 +166,13 @@ class World
 
   	//ADVANCE EACH POINT
   	for(var i=0; i<objarr.length; i++) {
-  		p = objarr[i];
+  		var p = objarr[i];
   		if(!p || p.disabled) continue; //this point no longer exists
   		//update object position based on current velocity
   		p.x+=p.vel.x * step_size;
   		p.y+=p.vel.y * step_size;
   		if(do_edge_bounce) {
-  			out_of_bounds = (p.x>level_edge.x || p.x<-level_edge.x || p.y>level_edge.y || p.y<-level_edge.y);
+  			var out_of_bounds = (p.x>level_edge.x || p.x<-level_edge.x || p.y>level_edge.y || p.y<-level_edge.y);
   			if(p.type=='bullet' && out_of_bounds) delete(objarr[i]);
   			if(out_of_bounds) {
   				if(p.x>level_edge.x) { p.x=level_edge.x; p.vel.x*=-1; }
