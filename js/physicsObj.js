@@ -16,7 +16,7 @@ class PhysicsObj extends Obj
   collide(o2) {
 		o1 = this;
 		var relative_vel_mag = Math.sqrt( Math.pow((o1.vel.x-o2.vel.x), 2) + Math.pow((o1.vel.y-o2.vel.y), 2) );
-		dist = Math.sqrt( Math.pow((o1.x-o2.x), 2) + Math.pow((o1.y-o2.y), 2) );
+		var dist = Math.sqrt( Math.pow((o1.x-o2.x), 2) + Math.pow((o1.y-o2.y), 2) );
 		min_dist = o1.diam/2 + o2.diam/2;
 		var over_dist = min_dist-dist;
 		var dist_err = over_dist/min_dist;

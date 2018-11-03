@@ -1,12 +1,19 @@
+LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40, FIREKEY = 32;
+var keystate = [];
+
 class World
 {
   constructor(){
+
     this.start_time = Date.now();
 
     this.objarr = [];
     this.players = [];
 
-    load_world_objects();
+    this.screen_pos_x = 0;
+    this.screen_pos_y = 0;
+
+    this.load_world_objects();
 
   }
 
@@ -32,42 +39,37 @@ class World
     this.players.push(obj.index);
   }
 
-  function start_sim() {
-  	//init
-
-  	//DRAW START CONDITIONS
-  	sim_draw();
-  	//DRAW ALL
-  	run_sim_step_loop();
+  start_sim() {
+  	this.sim_draw();
+  	this.run_sim_step_loop();
   }
 
-  function run_sim_step_loop() {
+
+  run_sim_step_loop() {
   	step_cnt++;
   	full_cnt++;
-  	setTimeout(function(){
+  	setTimeout(function(parent_this){
   		if(game_state=='play') {
-  			if(!sim_step()) return false;
+  			if(!parent_this.sim_step()) return false;
   			if(step_cnt%draw_once_per_n_steps==0) {
   				step_cnt=0;
   				frame_cnt++; if(frame_cnt_timer<Date.now()) { frame_cnt_per_second = frame_cnt; frame_cnt=0; frame_cnt_timer = Date.now()+1000;  }
-  				if(!sim_draw()) return false;
+  				if(!parent_this.sim_draw()) return false;
   			}
   		}
-      run_sim_step_loop();
-  	}, loop_time_ms);
+      this.run_sim_step_loop();
+  	}, loop_time_ms, this);
   }
 
-  function sim_step() {
-
+  sim_step() {
   	//APPLY MOVEMENT FORCES TO PLAYERS
   	for(var i=0; i<players.length; i++) {
-  		oid = players[i];
-  		pobj = objarr[oid];
 
   		if(keystate[LEFTKEY]) pobj.rot.rotate(-1*ROTATE_SPEED*step_size);
   		if(keystate[RIGHTKEY]) pobj.rot.rotate(1*ROTATE_SPEED*step_size);
   		if(keystate[UPKEY]) { pobj.vel.x += pobj.rot.x*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*FORWARD_ACCEL*step_size; }
-  		if(keystate[DOWNKEY]) {
+  		if(keystate[DOWNKEY]) { pobj.vel.x += pobj.rot.x*-1*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*-1*FORWARD_ACCEL*step_size; }
+  		if(keystate[FIREKEY]) {
 
   			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
   				pobj.last_fire_time = Date.now();
@@ -90,25 +92,25 @@ class World
   	//APPLY FORCES TO RECALCULATE VELOCITY VECTORS
 
   	//PERFORM COLLISSIONS AND CLEANUP
-  	for(var i=0; i<objarr.length; i++)
+    for(var i=0; i<objarr.length; i++)
   	{
-  		p1 = objarr[i];
+  		var p1 = objarr[i];
   		if(!p1 || p1.disabled) continue; //this object no longer exists
   		if(p1.type=='bullet' && (Math.abs(p1.vel.x)+Math.abs(p1.vel.y)) < BULLET_SPEED*.8) { delete(objarr[i]); continue; }
 
   		for(var j=i+1; j<objarr.length; j++)
   		{
-  			p2 = objarr[j];
+  			var p2 = objarr[j];
   			if(!p2 || p2.disabled) continue; //this object no longer exists
   			if(p1.type=='bullet' && p2.type=='bullet') continue; //they're both bullets
 
   			//remove old/slow bullets (they also get removed if they leave the screen)
   			if(p2.type=='bullet' && (Math.abs(p2.vel.x)+Math.abs(p2.vel.y)) < BULLET_SPEED*.8) { delete(objarr[j]); continue; }
 
-  			dist = Math.sqrt( Math.pow((p1.x-p2.x), 2) + Math.pow((p1.y-p2.y), 2) );
-  			min_dist = p1.diam/2 + p2.diam/2; //objects can't possibly be closer than this
-  			use_dist = dist<min_dist? min_dist:dist;
-  			is_touching = ((dist - (p1.diam/2) - (p2.diam/2)) <= 0);
+  			var dist = Math.sqrt( Math.pow((p1.x-p2.x), 2) + Math.pow((p1.y-p2.y), 2) );
+  			var min_dist = p1.diam/2 + p2.diam/2; //objects can't possibly be closer than this
+  			var use_dist = dist<min_dist? min_dist:dist;
+  			var is_touching = ((dist - (p1.diam/2) - (p2.diam/2)) <= 0);
 
   			//PERFORM COLLISION
   			if(!p1.no_collision && !p2.no_collision) {
@@ -119,7 +121,7 @@ class World
   		}
   	}
 
-  	//APPLY GRAVITY & OTHHER FORCES
+    //APPLY GRAVITY & OTHHER FORCES
   	for(var i=0; i<objarr.length; i++)
   	{
   		p1 = objarr[i];
@@ -182,11 +184,11 @@ class World
   	return true;
   }
 
-  function sim_draw() {
+  sim_draw() {
   	//scroll to new player position
   	//var wrapper = document.getElementById('canvasWrapper');
-  	screen_pos_x = player1_obj.x - Math.round(xmax/2);
-  	screen_pos_y = player1_obj.y - Math.round(ymax/2);
+  	this.screen_pos_x = player1_obj.x - Math.round(xmax/2);
+  	this.screen_pos_y = player1_obj.y - Math.round(ymax/2);
   	//wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
   	//wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
 
@@ -204,7 +206,7 @@ class World
   	}
 
   	//TRANSLATE BY USER POSIITON
-  	context.translate(-screen_pos_x, -screen_pos_y);
+  	context.translate(-this.screen_pos_x, -this.screen_pos_y);
 
 
   	//DRAW EDGE OF LEVEL
