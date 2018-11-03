@@ -143,6 +143,7 @@ obj.index = objarr.push(obj) - 1;
 //ADD ALL OTHER OBJECTS
 for(var n=0; n<num_rand_planets; n++) {
 	obj = new Asteroid();
+	obj.positionRandomly(xmax,ymax);
 	obj.mass=100;
 	obj.index = objarr.push(obj) - 1;
 }
