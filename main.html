@@ -23,12 +23,7 @@
 <link rel="stylesheet" href="css/weapons.css">
 
 </head>
-<body>
-
-
-<div id='canvasWrapper' style='width:1024px; height: 768px; overflow: hidden;'>
-	<canvas id="myCanvas" width="1200" height="1200"></canvas>     
-</div>
+<body style="background:url('images/bg/star_bg.jpg')">
 
 
 <script>
@@ -305,9 +300,9 @@ function sim_step() {
 			if(p.type=='bullet' && out_of_bounds) delete(objarr[i]);
 			if(out_of_bounds) {
 				if(p.x>level_edge.x) { p.x=level_edge.x; p.vel.x*=-1; }
-				if(p.x<-level_edge.x) { p.x=0; p.vel.x*=-1; }
+				if(p.x<-level_edge.x) { p.x=-level_edge.x; p.vel.x*=-1; }
 				if(p.y>level_edge.y) { p.y=level_edge.y; p.vel.y*=-1; }
-				if(p.y<-level_edge.y) { p.y=0; p.vel.y*=-1; }
+				if(p.y<-level_edge.y) { p.y=-level_edge.y; p.vel.y*=-1; }
 			}
 		}
 	}
@@ -323,9 +318,14 @@ function sim_step() {
 
 function sim_draw() {
 	//scroll to new player position
-	var wrapper = document.getElementById('canvasWrapper');  
-	wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
-	wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
+	//var wrapper = document.getElementById('canvasWrapper');  
+	screen_pos_x = player1_obj.x - Math.round(xmax/2);
+	screen_pos_y = player1_obj.y - Math.round(ymax/2);
+	//wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
+	//wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
+	
+	//save the default transformation matrix
+	context.save(); //push()
 	
 	//CLEAR OLD
 	if(clear_each_frame) context.clearRect(0, 0, canvas.width, canvas.height);
@@ -336,16 +336,9 @@ function sim_draw() {
 		context.fillRect(0, 0, canvas.width, canvas.height);
 		context.stroke();
 	}
-
-	//SHOW COORDINATES
-	if(cursor_show_coordinates) {
-	  context.font = '10pt Calibri';
-	  context.fillStyle = '#000';
-	  context.fillText(canvas_mouse_pos.x + ',' + canvas_mouse_pos.y, 10, 20);
-	  context.fillText( Math.round((Date.now()-start_time)/1000.00) + " (Real Time)", 10, 40);
-	  context.fillText( Math.round(full_cnt*step_size) + "(Sim Time)", 10, 60);
-	  context.fillText( frame_cnt_per_second + " FPS", 10, 80);
-	}
+	
+	//TRANSLATE BY USER POSIITON 
+	context.translate(-screen_pos_x, -screen_pos_y);
 	
 	
 	//DRAW EDGE OF LEVEL
@@ -364,6 +357,19 @@ function sim_draw() {
 		obj.draw();
 	}
 	
+	context.restore(); //pop()
+	
+
+	//SHOW COORDINATES
+	if(cursor_show_coordinates) {
+	  context.font = '10pt Calibri';
+	  context.fillStyle = '#000';
+	  context.fillText(canvas_mouse_pos.x + ',' + canvas_mouse_pos.y, 10, 20);
+	  context.fillText( Math.round((Date.now()-start_time)/1000.00) + " (Real Time)", 10, 40);
+	  context.fillText( Math.round(full_cnt*step_size) + "(Sim Time)", 10, 60);
+	  context.fillText( frame_cnt_per_second + " FPS", 10, 80);
+	}
+
 	
 	return true;
 }
