@@ -1,3 +1,0 @@
-[submodule "js/server/ws"]
-	path = js/server/ws
-	url = https://github.com/websockets/ws.git
