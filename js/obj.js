@@ -22,6 +22,10 @@ class Obj
 	clone() { return Object.assign({}, this); }
 	destroy() {}
 
+	/**
+		convert the object to JSON string
+		@Return json representation of this object
+	*/
 	toJson()
 	{
 		return JSON.stringify(this);
