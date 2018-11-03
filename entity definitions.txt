@@ -3,7 +3,7 @@
 	playerid
 	type
 	image
-	rotation
+	rot
 	size
 	shape
 	position
@@ -35,7 +35,7 @@
 //class ship extend object
 //	shiptype
 //	thrust
-	rotation_speed
+	rot_speed
 //	equipped weapons (array) 
 //	?MaxSpeed
 //	?Occupants
