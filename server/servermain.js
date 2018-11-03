@@ -47,5 +47,8 @@ wss.on('connection', function connection(ws) {
 
 	var encoded = JSON.stringify(json_objs);
 	ws.send(encoded);
+	ws.close();
 });
+
+
 

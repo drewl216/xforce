@@ -59,7 +59,7 @@ class Obj
 	static fromJson(json_str)
 	{
 		var object_parsed = JSON.parse(json_str);
-		var obj = new xobj();
+		var obj = new this();
 		for (var prop in object_parsed) {
 			if (obj.hasOwnProperty(prop)) {
 			obj[prop] = object_parsed[prop];}

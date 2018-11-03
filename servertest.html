@@ -3,8 +3,9 @@
 
 <html>
 	<head>
-		<script type="text/javascript" src="js/obj.js">
-		</script>
+		<script type="text/javascript" src="js/obj.js"> </script>
+		<script type="text/javascript" src="js/util.js"> </script>
+		<script type="text/javascript" src="js/victor.min.js"></script>
 			
 		<script type = "text/javascript">
 			function WebSocketTest() {
@@ -18,14 +19,15 @@
 						
 						// Web Socket is connected, send data using send()
 						ws.send("Message to send");
-						alert("Message is sent...");
 					};
 				
 					ws.onmessage = function (evt) { 
-						var encoded = JSON.parse(evt);
-						var objs;
+						var encoded = JSON.parse(evt.data);
+						var objs = Array();
 						for (var i=0;i<encoded.length;i++) {
-							objs.push(xobj.fromJson(encoded));
+							var o = Obj.fromJson(encoded[i]);
+							objs.push(o);
+							o.positionRandomly(0,0,100,100);
 						}
 					};
 				
