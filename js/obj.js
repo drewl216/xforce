@@ -1,5 +1,8 @@
 
-function xobj() {
+class xobj 
+{
+	constructor() 
+	{
 	this.type = 'planet',
 	this.disabled = false;
 	this.no_gravity=false;
@@ -24,16 +27,19 @@ function xobj() {
 	this.collision_type = 'bounce';
 	this.collision_energy_loss_percent = 0.0000000;  // causes them to freez & lockup when 3 or more are enntangled :(
 
-	this.set_diam = function(d) {
+
+	this.set_diam(20);
+	}
+
+	set_diam(d) {
 		if(d==0.0) return;
 		this.diam = d;
 		this.area = (Math.PI*Math.pow(d/2,2));
 		this.density = this.mass/this.area;
 	}
-	this.set_diam(20);
 
 
-	this.draw = function() {
+	draw() {
     if(this.type=='planet' || this.type=='nucleus') {
 			context.beginPath();
 			context.arc(this.x, this.y, this.diam/2, 0, 2 * Math.PI, false);
@@ -84,15 +90,15 @@ function xobj() {
 	  }
 
 	};
-	this.clone = function() { return Object.assign({}, this); };
+	clone() { return Object.assign({}, this); };
 
-	this.collide = function(o2) {
+	collide(o2) {
 		o1 = this;
-		relative_vel_mag = Math.sqrt( Math.pow((o1.vel.x-o2.vel.x), 2) + Math.pow((o1.vel.y-o2.vel.y), 2) );
+		var relative_vel_mag = Math.sqrt( Math.pow((o1.vel.x-o2.vel.x), 2) + Math.pow((o1.vel.y-o2.vel.y), 2) );
 		dist = Math.sqrt( Math.pow((o1.x-o2.x), 2) + Math.pow((o1.y-o2.y), 2) );
 		min_dist = o1.diam/2 + o2.diam/2;
-		over_dist = min_dist-dist;
-		dist_err = over_dist/min_dist;
+		var over_dist = min_dist-dist;
+		var dist_err = over_dist/min_dist;
     uN = new Victor((o2.x-o1.x), (o2.y-o1.y)).normalize();
 
 		//COMBINE THESE 2 OBJECTS INTO o1, destroy o2
@@ -125,26 +131,28 @@ function xobj() {
 		if(this.collision_type=='bounce'){
 
 			if(o1.type!='bullet' && o2.type!='bullet' && o1.type!='player' && o2.type!='player' && o2.type!='nucleus' && o1.type!='nucleus') {
-				one_is_red = (o1.color.r>0 || o2.color.r>0);
-				one_is_green = (o1.color.g>0 || o2.color.g>0);
+				var one_is_red = (o1.color.r>0 || o2.color.r>0);
+				var one_is_green = (o1.color.g>0 || o2.color.g>0);
 				if(one_is_red && !one_is_green) { o1.color=o2.color={r:255, g:0, b:0}; }
 				if(one_is_green && !one_is_red) { o1.color=o2.color={r:0, g:200, b:0}; }
 				if(one_is_green && one_is_red) { o1.color=o2.color={r:0, g:0, b:255}; }
 			}
 
 			//roll back 1 full step to find accurate collision
-			x1 = o1.x - o1.vel.x*step_size; y1 = o1.y - o1.vel.y*step_size;
-			x2 = o2.x - o2.vel.x*step_size; y2 = o2.y - o2.vel.y*step_size;
+			var x1 = o1.x - o1.vel.x*step_size;
+			var y1 = o1.y - o1.vel.y*step_size;
+			var x2 = o2.x - o2.vel.x*step_size;
+			var y2 = o2.y - o2.vel.y*step_size;
 
 			//if rolling back a full step won't help then forcibly move them apart on their normal vector (they're probably stuck on eachother)
-			newdist = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
+			var newdist = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
 			if(newdist < min_dist) { //they're still collided even after backing up a step
 				console.log("pull appart : "+relative_vel_mag);
-				o1_mass_perc = o1.mass/(o1.mass+o2.mass);
-				o2_mass_perc = o2.mass/(o2.mass+o1.mass);
+				var o1_mass_perc = o1.mass/(o1.mass+o2.mass);
+				var o2_mass_perc = o2.mass/(o2.mass+o1.mass);
 				//console.log("m1"+o1.mass+"("+o1_mass_perc+")   m2"+o2.mass+"("+o2_mass_perc+")");
-				o1move = (o1.no_collision_movement? 0 : (o2.no_collision_movement? over_dist:over_dist*o2_mass_perc) );
-		    o2move = (o2.no_collision_movement? 0 : (o1.no_collision_movement? over_dist:over_dist*o1_mass_perc) );
+				var o1move = (o1.no_collision_movement? 0 : (o2.no_collision_movement? over_dist:over_dist*o2_mass_perc) );
+		    var o2move = (o2.no_collision_movement? 0 : (o1.no_collision_movement? over_dist:over_dist*o1_mass_perc) );
 				if(o1move>0) { o1.x -= uN.x*o1move; o1.y -= uN.y*o1move; }
 		    if(o2move>0) { o2.x += uN.x*o2move; o2.y += uN.y*o2move; }
 			}
@@ -156,18 +164,20 @@ function xobj() {
 				{
 					//advance time slowly until they're colliding
 					var scnt = 0;
-					resolution = 2;
-					substep = step_size / resolution;
+					var resolution = 2;
+					var substep = step_size / resolution;
 					while(true){
 						scnt++;
 
-						x1_last = x1; y1_last = y1;
-						x2_last = x2; y2_last = y2;
+						var x1_last = x1;
+						var y1_last = y1;
+						var x2_last = x2;
+						var y2_last = y2;
 
 						x1 += o1.vel.x*substep; y1 += o1.vel.y*substep;
 						x2 += o2.vel.x*substep; y2 += o2.vel.y*substep;
 
-						newdist = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
+						var newdist = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
 
 						if(scnt>1000) { console.log('BREAK! Ran #'+scnt+' resolution:'+resolution + ' dist:'+newdist  ); break; }
 						if(newdist <= min_dist) { //we collided
@@ -198,13 +208,13 @@ function xobj() {
 			var uN = new Victor((o2.x-o1.x), (o2.y-o1.y)).normalize();
 			var uT = new Victor(-1*uN.y, uN.x);
 
-			o1vel_V = new Victor(o1.vel.x, o1.vel.y);
-			o1velN = o1vel_V.dot(uN); // component of o1 velocity in normal direction
-			o1velT = o1vel_V.dot(uT); // component of o1 velocity in tangent direction
+			var o1vel_V = new Victor(o1.vel.x, o1.vel.y);
+			var o1velN = o1vel_V.dot(uN); // component of o1 velocity in normal direction
+			var o1velT = o1vel_V.dot(uT); // component of o1 velocity in tangent direction
 
-			o2vel_V = new Victor(o2.vel.x, o2.vel.y);
-			o2velN = o2vel_V.dot(uN); // component of o2 velocity in normal direction
-			o2velT = o2vel_V.dot(uT); // component of o2 velocity in tangent direction
+			var o2vel_V = new Victor(o2.vel.x, o2.vel.y);
+			var o2velN = o2vel_V.dot(uN); // component of o2 velocity in normal direction
+			var o2velT = o2vel_V.dot(uT); // component of o2 velocity in tangent direction
 
 			//objects already moving away from the collision?
 			if(o1velN<=0 && o2velN>=0) return;
@@ -213,8 +223,8 @@ function xobj() {
 			if(o1.no_collision_movement) { new_o1velN = o1velN; if(!o2.no_collision_movement){new_o2velN = o2velN*-1;} }
 			else if(o2.no_collision_movement) { new_o2velN = o2velN; if(!o1.no_collision_movement){new_o1velN = o1velN*-1;} }
 			else { //normal collision
-				new_o1velN =  ( o1velN*(o1.mass-o2.mass) + 2*o2.mass*o2velN ) / (o1.mass + o2.mass);
-				new_o2velN =  ( o2velN*(o2.mass-o1.mass) + 2*o1.mass*o1velN ) / (o1.mass + o2.mass);
+				var new_o1velN =  ( o1velN*(o1.mass-o2.mass) + 2*o2.mass*o2velN ) / (o1.mass + o2.mass);
+				var new_o2velN =  ( o2velN*(o2.mass-o1.mass) + 2*o1.mass*o1velN ) / (o1.mass + o2.mass);
 			}
 
 			//simulate energy loss in collision - reduce velocity in this direction
@@ -231,14 +241,14 @@ function xobj() {
 
 
 			//get the new velocity vectors (in normal direction)
-			new_o1velN_V = new Victor(new_o1velN*uN.x,new_o1velN*uN.y);
-			new_o2velN_V = new Victor(new_o2velN*uN.x,new_o2velN*uN.y);
+			var new_o1velN_V = new Victor(new_o1velN*uN.x,new_o1velN*uN.y);
+			var new_o2velN_V = new Victor(new_o2velN*uN.x,new_o2velN*uN.y);
 			//get the velocity vectors (in tangent direction) - they haven't changed
-			new_o1velT_V = new Victor(o1velT*uT.x,o1velT*uT.y);
-			new_o2velT_V = new Victor(o2velT*uT.x,o2velT*uT.y);
+			var new_o1velT_V = new Victor(o1velT*uT.x,o1velT*uT.y);
+			var new_o2velT_V = new Victor(o2velT*uT.x,o2velT*uT.y);
 			//new velocity vectors are sum of new Normal and Tangent Vectors
-			new_o1vel_V = new_o1velN_V.add(new_o1velT_V);
-			new_o2vel_V = new_o2velN_V.add(new_o2velT_V);
+			var new_o1vel_V = new_o1velN_V.add(new_o1velT_V);
+			var new_o2vel_V = new_o2velN_V.add(new_o2velT_V);
 			//store back into our system
 
 			if(!o1.no_collision_movement) {
