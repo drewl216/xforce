@@ -51,14 +51,6 @@ class PhysicsObj extends Obj
 		}
 		if(this.collision_type=='bounce'){
 
-			if(o1.type!='bullet' && o2.type!='bullet' && o1.type!='player' && o2.type!='player' && o2.type!='nucleus' && o1.type!='nucleus') {
-				var one_is_red = (o1.color.r>0 || o2.color.r>0);
-				var one_is_green = (o1.color.g>0 || o2.color.g>0);
-				if(one_is_red && !one_is_green) { o1.color=o2.color={r:255, g:0, b:0}; }
-				if(one_is_green && !one_is_red) { o1.color=o2.color={r:0, g:200, b:0}; }
-				if(one_is_green && one_is_red) { o1.color=o2.color={r:0, g:0, b:255}; }
-			}
-
 			//roll back 1 full step to find accurate collision
 			var x1 = o1.x - o1.vel.x*step_size;
 			var y1 = o1.y - o1.vel.y*step_size;
