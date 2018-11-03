@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
-const WebSocket = require('ws');
+const WebSocket = require('./ws/index.js');
+const Obsj = require('../js/obj.js');
+
+
 
 const wss = new WebSocket.Server({
 	port: 8080,
