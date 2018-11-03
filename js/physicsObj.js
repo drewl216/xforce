@@ -2,6 +2,15 @@ class PhysicsObj extends xobj
 {
   constructor(){
     super();
+    this.mass = 100;// obj_default_mass
+    this.net_force = Victor(0,0);
+
+    this.no_gravity=false;
+    this.no_gravity_movement=false;
+    this.no_collision = false;
+    this.no_collision_movement = false;
+    this.collision_type = 'bounce';
+    this.collision_energy_loss_percent = 0.0000000;  // causes them to freez & lockup when 3 or more are enntangled :(
   }
 
   collide(o2) {

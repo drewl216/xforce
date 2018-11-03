@@ -2,6 +2,7 @@ class bullet extends PhysicsObj
 {
   constructor(){
     super();
+    this.diam = 3;
   }
 
   draw(){
@@ -12,5 +13,6 @@ class bullet extends PhysicsObj
 	    context.fill();
 	    context.strokeStyle = 'rgb('+Math.round(this.color.r)+','+Math.round(this.color.g)+','+Math.round(this.color.b)+')';//'#000000';  - The line arround the object
 	    context.stroke();
+    }
   }
 }

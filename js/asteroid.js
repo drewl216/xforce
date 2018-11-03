@@ -2,6 +2,7 @@ class asteroid extends PhysicsObj
 {
   constructor(){
     super();
+    this.diam = 20;
   }
 
   draw(){
