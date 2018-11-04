@@ -26,6 +26,17 @@ class ServerMessage {
 		return JSON.stringify(messageObject);
 	}
 
+	static updateObjects(objs) {
+		var messageObject = {};
+		messageObject.type="update";
+		messageObject.objs = Array();
+
+		for (var i=0;i<objs.length;i++) {
+			messageObject.objs.push(objs[i].getToSerialize());
+		}
+		return JSON.stringify(messageObject);
+	}
+
 	/**
 		sends the id of the player to the client
 		@return string
@@ -36,7 +47,8 @@ class ServerMessage {
 		messageObject.type="setPlayerId";
 		messageObject.id = id;
 		return JSON.stringify(messageObject);
-}
+	}
+
 
 	/**
 		parses a message from the server

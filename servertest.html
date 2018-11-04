@@ -24,7 +24,7 @@
 			};
 		
 			ws.onmessage = function (evt) { 
-				var msg = ServerMessage.parseServerMessage(evt.data);
+				var msg = ServerMessage.parseServerMessage(evt.data,objs);
 
 				switch (msg.type) {
 					case "add":
@@ -35,11 +35,19 @@
 						}
 					} break;
 
+					case "update":
+					{
+						for (var i=0;i<msg.objs.length;i++) {
+							console.log("Updating Object:"+msg.objs[i].id);
+							objs[msg.objs[i].id].updateFromSerialize(msg.objs[i]);
+						}
+					} break;
+
 					case "setPlayerId":
 					{
 						console.log("Setting player id to"+msg.id);
 						playerObj = objs[msg.id];
-					}
+					} break;
 
 					//case z
 				}
@@ -48,7 +56,7 @@
 			ws.onclose = function() { 
 
 				// websocket is closed.
-				alert("Connection is closed..."); 
+				console.log("Connection is closed..."); 
 			};
 		} else {
 		  

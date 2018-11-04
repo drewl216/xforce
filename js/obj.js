@@ -246,10 +246,34 @@ collide(o2) {
 		return toSerialize;
 	}
 
+	/**
+		update object from a toSerialize() created object
+		@param object_parsed an object created by toSerialize()
+	*/
+	updateFromSerialize(object_parsed)
+	{
+		this.id                             = object_parsed.id;
+		this.x                              = object_parsed.x;
+		this.y                              = object_parsed.y;
+		this.pos                            = object_parsed.pos;
+		this.vel                            = object_parsed.vel;
+		this.rot                            = object_parsed.rot;
+		this.rot_vel                        = object_parsed.rot_vel;
+		this.is_visible                     = object_parsed.is_visible;
+		this.color                          = object_parsed.color;
+		this.mass                           = object_parsed.mass;
+		this.net_force                      = object_parsed.net_force;
+		this.no_gravity                     = object_parsed.no_gravity;
+		this.no_gravity_movement            = object_parsed.no_gravity_movement;
+		this.no_collision                   = object_parsed.no_collision;
+		this.no_collision_movement          = object_parsed.no_collision_movement;
+		this.collision_type                 = object_parsed.collision_type;
+		this.collision_energy_loss_percent  = object_parsed.collision_energy_loss_percent;
+	}
 
 	/**
 		create from a json version
-		@param string json_str a json encoded xobj
+		@param object_parsed an object created by toSerialize()
 	*/
 	static unSerialize(object_parsed)
 	{
@@ -277,6 +301,7 @@ collide(o2) {
 
 
 } //end xobj class
+
 
 
 

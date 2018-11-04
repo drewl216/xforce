@@ -27,25 +27,38 @@ const wss = new WebSocket.Server({
 	 }
 });
 
+
+var objs = Array();
+var connections = Array();
+
 wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-  });
+	ws.on('message', function incoming(message) {
+	});
 
+	if (objs.length > 0) {
+		ws.send(ServerMessage.addObjects(objs));
+	}
 
-
-	var objs = Array();
+	connections.push(ws);
 	objs.push(new Obj());
-	objs.push(new Obj());
-	objs[0].id=0;
-	objs[1].id=1;
+	var newId = objs.length-1;
+	objs[newId].id=newId;
 
-
-	ws.send(ServerMessage.addObjects(objs));
+	sendToAll(ServerMessage.addObjects(Array(objs[newId])));
 	ws.send(ServerMessage.setPlayerObject(1));
-
-
-	objs.push(new Obj());
-	objs[2].id=2;
-	ws.send(ServerMessage.addObjects(Array(objs[2])));
 });
+
+setInterval(function(){
+	if (objs.length > 0) {
+		var index = Util.rand(0,objs.length-1);
+		objs[index].x++;
+		sendToAll(ServerMessage.updateObjects(Array(objs[index])));
+	}
+},1000);
+
+function sendToAll(message)
+{
+	for (var i=0;i<connections.length;i++) {
+		connections[i].send(message);
+	}
+}
