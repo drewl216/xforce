@@ -2,6 +2,15 @@ class World
 {
   constructor(){
     this.load_world_objects();
+	this.image = "/images/bg/star_bg.jpg";
+	// this.objarray = []
+	//this.playstartpos = []
+	this.player_qty = 2;
+	this.win_condition = "kills"; //(kills, elimination, points, capture, base_destroy)
+	this.win_limit = 5;
+	this.respawn_timer = 5000; //ms
+	// this.players = 
+	//this.teams=
 
   }
 
@@ -13,20 +22,19 @@ class World
     	obj.mass=100;
     	obj.index = objarr.push(obj) - 1;
     }
-
-    var obj = new Ship();
-    obj.type='player';
-    obj.immobile=false;
-    obj.x=xmax-100;
-    obj.y=ymax-100;
-    obj.mass = 100;
-    obj.density = 0;
-    obj.color = {r:0, g:100, b:200};
-    obj.diam = 20;
-    obj.index = objarr.push(obj) - 1;
-    this.player1_obj = objarr[obj.index];
-    console.log("initially" + this.player1_obj)
-    players.push(obj.index);
+	for (var n=0; n<this.player_qty; n++) {
+		var obj = new Ship();
+		obj.type='player';
+		obj.immobile=false;
+		obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
+		obj.mass = 100;
+		obj.density = 0;
+		obj.color = {r:0, g:100, b:200};
+		obj.diam = 20;
+		obj.index = objarr.push(obj) - 1;
+		player1_obj = objarr[obj.index];
+		players.push(obj.index);
+	}
   }
 
   start_sim() {
@@ -76,6 +84,7 @@ class World
   				pobj.vel.y -= pobj.rot.y * BAKUP_SPEED;
   			}
   		}
+
   	}
 
 
@@ -179,8 +188,10 @@ class World
   sim_draw() {
   	//scroll to new player position
   	//var wrapper = document.getElementById('canvasWrapper');
-  	screen_pos_x = this.player1_obj.x - Math.round(xmax/2);
-  	screen_pos_y = this.player1_obj.y - Math.round(ymax/2);
+  	screen_pos_x = player1_obj.x - Math.round(xmax/2);
+  	screen_pos_y = player1_obj.y - Math.round(ymax/2);
+  	//wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
+  	//wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
 
   	//save the default transformation matrix
   	context.save(); //push()
@@ -202,7 +213,6 @@ class World
   	//DRAW EDGE OF LEVEL
   	context.beginPath();
   	context.lineWidth="6";
-    console.log(this.player1_obj);
   	context.rect(-level_edge.x, -level_edge.y, level_edge.x*2, level_edge.y*2);
     context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
     context.stroke();

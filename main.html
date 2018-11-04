@@ -8,11 +8,12 @@
 <meta name="keywords" content="" />
 <meta name="viewport" content="width=device-width">
 
+
 <link rel="stylesheet" href="js/jquery/jquery-ui.min.css">
 <script src="js/jquery/jquery-3.3.1.min.js"></script>
 <script src="js/jquery/jquery-ui.min.js"></script>
 
-<script src="js/victor.js"></script>
+<script src="js/victor.min.js"></script>
 
 <script src="js/obj.js"></script>
 <script src="js/ship.js"></script>
@@ -69,7 +70,7 @@ var step_cnt = 0;
 var full_cnt = 0;
 var frame_cnt = 0;
 var frame_cnt_timer = Date.now()+1000;
-var frame_cnt_per_second = 0;
+var frame_cnt_per_second = 110;
 
 var xmax=$(window).width();
 var ymax=$(window).height();
@@ -88,7 +89,7 @@ var cursor_show_coordinates = true;
 var objarr = [];
 var players = [];
 
-var num_rand_planets = 1;
+var num_rand_planets = 30;
 
 //CREATE THE CANVAS OBJECT
 var canvas=document.getElementById("myCanvas");
@@ -203,7 +204,6 @@ function sim_step() {
 	for(var i=0; i<players.length; i++) {
 		oid = players[i];
 		pobj = objarr[oid];
-<<<<<<< HEAD
 		if(pobj.control_scheme=="directional"){
 			if(keystate[LEFTKEY]) pobj.vel.x -= FORWARD_ACCEL*step_size;
 			if(keystate[RIGHTKEY]) pobj.vel.x += FORWARD_ACCEL*step_size;
@@ -224,27 +224,6 @@ function sim_step() {
 					objarr.push(obj);
 					snd_bloip.play();
 				}
-=======
-
-		if(keystate[LEFTKEY]) pobj.rot.rotate(-1*ROTATE_SPEED*step_size);
-		if(keystate[RIGHTKEY]) pobj.rot.rotate(1*ROTATE_SPEED*step_size);
-		if(keystate[UPKEY]) { pobj.vel.x += pobj.rot.x*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*FORWARD_ACCEL*step_size; }
-		if(keystate[DOWNKEY]) { pobj.vel.x += pobj.rot.x*-1*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*-1*FORWARD_ACCEL*step_size; }
-		if(keystate[FIREKEY]) {
-
-			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
-				pobj.last_fire_time = Date.now();
-				obj = new Projectile();
-				obj.x = pobj.x + pobj.rot.x*(pobj.diam+10);
-				obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
-				obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
-				obj.vel.y = pobj.vel.y + pobj.rot.y*BULLET_SPEED;
-				objarr.push(obj);
-
-				//accelerate backwards
-				pobj.vel.x -= pobj.rot.x * BAKUP_SPEED;
-				pobj.vel.y -= pobj.rot.y * BAKUP_SPEED;
->>>>>>> fff34a46f6581b64600b8776ca5f763ee65fff3b
 			}
 		}
 		else {
@@ -256,7 +235,7 @@ function sim_step() {
 
 				if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
 					pobj.last_fire_time = Date.now();
-					obj = new Bullet();
+				obj = new Projectile();
 					obj.x = pobj.x + pobj.rot.x*(pobj.diam+10);
 					obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
 					obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
@@ -393,12 +372,18 @@ function sim_draw() {
 	}	//save the default transformation matrix
 
 
+	//DRAW BACKGROUND
+	context.save(); //push()
+	//TRANSLATE BY USER POSIITON
+	level_width_plus_half_screen = 2*level_edge.x-(.5*canvas.width);
+	level_height_plus_half_screen = 2*level_edge.y-(.5*canvas.height);
+	//percent_x = 
+	context.translate(-screen_pos_x, -screen_pos_y);
+	context.drawImage(background,-level_edge.x-(.5*canvas.width),-level_edge.y-(.5*canvas.height), level_edge.x*2+canvas.width,level_edge.y*2+canvas.height);
+	context.restore(); //pop()
 
 
 	context.save(); //push()
-
-
-
 
 	//TRANSLATE BY USER POSIITON
 	context.translate(-screen_pos_x, -screen_pos_y);
@@ -408,8 +393,7 @@ function sim_draw() {
 	context.beginPath();
 	context.lineWidth="6";
 	context.rect(-level_edge.x, -level_edge.y, level_edge.x*2, level_edge.y*2);
-	context.drawImage(background,-level_edge.x*-(.5*canvas.width),-level_edge.y-(.5*canvas.height), level_edge.x*2+canvas.width,level_edge.y*2+canvas.height);
-  context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
+ context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
   context.stroke();
 
 
