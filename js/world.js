@@ -1,45 +1,47 @@
 class World
 {
-  constructor(){
-    this.objarr = [];
-    this.players = [];
+	constructor(){
+		this.objarr = [];
+		this.players = [];
 
-    this.load_world_objects();
-	this.image = "/images/bg/star_bg.jpg";
-	// this.this.objarray = []
-	//this.playstartpos = []
-	this.player_qty = 2;
-	this.win_condition = "kills"; //(kills, elimination, points, capture, base_destroy)
-	this.win_limit = 5;
-	this.respawn_timer = 5000; //ms
-	// this.this.players =
-	//this.teams=
+		this.load_world_objects();
+		this.image = "/images/bg/star_bg.jpg";
+		// this.this.objarray = []
+		//this.playstartpos = []
+		this.player_qty = 2;
+		this.win_condition = "kills"; //(kills, elimination, points, capture, base_destroy)
+		this.win_limit = 5;
+		this.respawn_timer = 5000; //ms
+		// this.this.players =
+		//this.teams=
 
+	}
 
-  }
+	load_world_objects(){
+		//ADD ALL OTHER OBJECTS
+		for(var n=0; n<num_rand_planets; n++) {
+			var obj = new Asteroid();
+			obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
+			this.addObject(obj);
+		}
 
-  load_world_objects(){
-    //ADD ALL OTHER OBJECTS
-    for(var n=0; n<num_rand_planets; n++) {
-    	var obj = new Asteroid();
-    	obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
-    	obj.index = this.objarr.push(obj) - 1;
-    }
-
-    var obj = new Ship();
-    obj.type='player';
-    obj.immobile=false;
-    obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
-    obj.mass = 100;
-    obj.density = 0;
-    obj.color = {r:0, g:100, b:200};
-    obj.diam = 20;
-    obj.index = this.objarr.push(obj) - 1;
-    this.player1_obj = this.objarr[obj.index];
-    this.players.push(obj.index);
-
+		var obj = new Ship();
+		obj.type='player';
+		obj.immobile=false;
+		obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
+		obj.mass = 100;
+		obj.density = 0;
+		obj.color = {r:0, g:100, b:200};
+		obj.diam = 20;
+		this.addObject(obj);
+		this.player1_obj = obj;
+		this.players.push(obj.id);
 
   }
+
+	addObject() {
+		obj.id = this.objarr.push(obj)-1;
+	}
 
   start_sim() {
   	this.sim_draw();
@@ -83,7 +85,7 @@ class World
   					obj.y = pobj.y+ obj.diam*vect.y;
   					obj.vel.x = pobj.vel.x + BULLET_SPEED*vect.x;
   					obj.vel.y = pobj.vel.y + BULLET_SPEED*vect.y;
-  					this.objarr.push(obj);
+  					this.addObject(obj);
   					snd_bloip.play();
   				}
   			}
@@ -102,7 +104,7 @@ class World
   					obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
   					obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
   					obj.vel.y = pobj.vel.y + pobj.rot.y*BULLET_SPEED;
-  					this.objarr.push(obj);
+  					this.addObject(obj);
   					snd_bloip.play();
 
   					//accelerate backwards
