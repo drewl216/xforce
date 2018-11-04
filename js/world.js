@@ -26,8 +26,7 @@ class World
 		var obj = new Ship();
 		obj.type='player';
 		obj.immobile=false;
-		obj.x=xmax-100;
-		obj.y=ymax-100;
+		obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
 		obj.mass = 100;
 		obj.density = 0;
 		obj.color = {r:0, g:100, b:200};
