@@ -145,24 +145,7 @@ obj.index = objarr.push(obj) - 1;
 */
 
 
-//ADD ALL OTHER OBJECTS
-for(var n=0; n<num_rand_planets; n++) {
-	obj = new Asteroid();
-	obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
-	obj.index = objarr.push(obj) - 1;
-}
 
-obj = new Ship();
-obj.type='player';
-obj.immobile=false;
-obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
-obj.mass = 100;
-obj.density = 0;
-obj.color = {r:0, g:100, b:200};
-obj.diam = 20;
-obj.index = objarr.push(obj) - 1;
-player1_obj = objarr[obj.index];
-players.push(obj.index);
 
 
 
@@ -248,7 +231,7 @@ function sim_step() {
 					pobj.vel.y -= pobj.rot.y * BAKUP_SPEED;
 				}
 			}
-		}			
+		}
 	}
 
 
@@ -377,7 +360,7 @@ function sim_draw() {
 	//TRANSLATE BY USER POSIITON
 	level_width_plus_half_screen = 2*level_edge.x-(.5*canvas.width);
 	level_height_plus_half_screen = 2*level_edge.y-(.5*canvas.height);
-	//percent_x = 
+	//percent_x =
 	context.translate(-screen_pos_x, -screen_pos_y);
 	context.drawImage(background,-level_edge.x-(.5*canvas.width),-level_edge.y-(.5*canvas.height), level_edge.x*2+canvas.width,level_edge.y*2+canvas.height);
 	context.restore(); //pop()

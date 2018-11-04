@@ -13,15 +13,15 @@
 <script src="js/jquery/jquery-3.3.1.min.js"></script>
 <script src="js/jquery/jquery-ui.min.js"></script>
 
-<script src="js/victor.js"></script>
+<script src="js/victor.min.js"></script>
 
 <script src="js/obj.js"></script>
 <script src="js/ship.js"></script>
 <script src="js/asteroid.js"></script>
 <script src="js/projectile.js"></script>
-<script src="js/world.js"></script>
 
 <script src="js/player.js"></script>
+<script src="js/world.js"></script>
 <script src="js/util.js"></script>
 
 <link rel="stylesheet" href="css/main.css">
@@ -33,6 +33,8 @@
 <!--NEW-->
 <img src = "images/bg/star_bg.jpg" id="bg" style="display:none;" />
 
+
+
 <div id='canvasWrapper' style='width:1024px; height: 768px; overflow: hidden;'>
 	<canvas id="myCanvas" width="1200" height="1200"></canvas>
 </div>
@@ -43,8 +45,12 @@
 var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40, FIREKEY = 32;
 var keystate = [];
 
-//NEW
+//NEW: image and sound loading
 var background = document.getElementById('bg');
+var snd_bloip = new Audio();
+snd_bloip.src = "audio/bloip.ogg";
+
+
 //MOVEMENT & FIRING
 var ROTATE_SPEED = 1.5;
 var FORWARD_ACCEL = 100;
@@ -84,15 +90,15 @@ var cursor_show_coordinates = true;
 var objarr = [];
 var players = [];
 
-var num_rand_planets = 300;
+var player1_obj = null;
+
+
+var num_rand_planets = 30;
 
 //CREATE THE CANVAS OBJECT
 var canvas=document.getElementById("myCanvas");
 var context=canvas.getContext("2d");
 
-var player1_obj = null;
-var screen_pos_x = null;
-var screen_pos_y = null;
 
 /*******************
 ADD OBJECTS TO FIELD
@@ -143,7 +149,11 @@ obj.index = objarr.push(obj) - 1;
 */
 
 
-//ADD ALL OTHER OBJECTS
+
+
+
+
+
 
 
 
@@ -170,13 +180,9 @@ function resize_canvas() {
 	//objarr[0].y = ymax/2;
 }
 $(window).resize(resize_canvas);
-resize_canvas();
-
 
 world = new World();
 world.start_sim();
-//start_sim();
-
 
 
 $(window).on('keypress',function(e){
