@@ -12,10 +12,17 @@ class Ship extends Obj
     this.can_control = 1;
 	this.damage_impact = 0; //- reduces effectiveness of components
 	this.dockable = 1;
-	this.control_scheme = 'rotational'; //- Method of movement (rotational or directional)
+	this.control_scheme = 'directional'; //- Method of movement (rotational or directional)
 	this.value = 0;  //cost to the team
 	this.Description = "No description provided.";
 	this.scanner_range = 400;
+	this.shield_max = 100;
+	this.shield_tot = 100;
+	this.shield_regen = .001;
+	this.armor = 1;
+	this.health = 100;
+	this.type='ship';
+	
   }
 
   draw(){
@@ -45,5 +52,10 @@ class Ship extends Obj
     context.stroke();
 
     context.restore(); // restores the coordinate system back to (0,0)
+  }
+  kill() {
+	i = this.id;
+	delete(objarr[i]);
+	
   }
 }
