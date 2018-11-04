@@ -54,8 +54,8 @@ class Ship extends Obj
     context.restore(); // restores the coordinate system back to (0,0)
   }
   kill() {
-	i = this.id;
-	delete(objarr[i]);
+	var i = this.id;
+	this.disabled=true;
 	
   }
 }

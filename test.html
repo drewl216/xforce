@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<base href="" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XForce</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<meta name="viewport" content="width=device-width">
+
+
+<link rel="stylesheet" href="js/jquery/jquery-ui.min.css">
+<script src="js/jquery/jquery-3.3.1.min.js"></script>
+<script src="js/jquery/jquery-ui.min.js"></script>
+
+<script src="js/victor.min.js"></script>
+
+<script src="js/obj.js"></script>
+<script src="js/ship.js"></script>
+<script src="js/asteroid.js"></script>
+<script src="js/projectile.js"></script>
+
+<script src="js/player.js"></script>
+<script src="js/world.js"></script>
+<script src="js/util.js"></script>
+
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/ships.css">
+<link rel="stylesheet" href="css/weapons.css">
+
+</head>
+<body>
+<!--NEW-->
+<img src = "images/bg/star_bg.jpg" id="bg" style="display:none;" />
+
+
+
+<div id='canvasWrapper' style='width:1024px; height: 768px; overflow: hidden;'>
+	<canvas id="myCanvas" width="1200" height="1200"></canvas>
+</div>
+
+
+<script>
+//KEY VARS
+var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40, FIREKEY = 32;
+var keystate = [];
+
+//NEW: image and sound loading
+var background = document.getElementById('bg');
+var snd_bloip = new Audio();
+snd_bloip.src = "audio/bloip.ogg";
+
+
+//MOVEMENT & FIRING
+var ROTATE_SPEED = 1.5;
+var FORWARD_ACCEL = 100;
+var BAKUP_SPEED = 5;
+var BULLET_SPEED = 500;
+var RATE_OF_FIRE_MS = 100;
+
+//VARIABLES
+var game_state = 'play';
+var clear_each_frame=true;
+var fade_each_frame=false;
+
+var start_time = Date.now();
+var loop_time_ms = 4;
+var step_size = .005; //fraction of a second computed each step, step size "1" equals 1 full second per step (very jerky and inacurate)
+var draw_once_per_n_steps = 5;
+var step_cnt = 0;
+var full_cnt = 0;
+var frame_cnt = 0;
+var frame_cnt_timer = Date.now()+1000;
+var frame_cnt_per_second = 110;
+
+var xmax=$(window).width();
+var ymax=$(window).height();
+
+var grav_const = 1000.00;
+
+var do_edge_bounce = true;
+var level_edge = {x:2000,y:1000}; // level will be twice this size (+ and -)
+
+var canvas_mouse_pos = {x:0,y:0};
+var cursor_show_coordinates = true;
+
+
+
+//STORE ALL OBJECTS
+var objarr = [];
+var players = [];
+
+var player1_obj = null;
+
+
+var num_rand_planets = 30;
+
+//CREATE THE CANVAS OBJECT
+var canvas=document.getElementById("myCanvas");
+var context=canvas.getContext("2d");
+
+
+/*******************
+ADD OBJECTS TO FIELD
+********************/
+
+
+
+
+/*
+
+
+
+
+obj = new xobj();
+obj.type='nucleus';
+obj.immobile=true;
+obj.no_gravity=false;
+obj.no_gravity_movement=true;
+obj.no_collision=false;
+obj.no_collision_movement=true;
+obj.x=xmax/2+20;
+obj.y=ymax/2;
+obj.mass = 1000;
+obj.density = 0;
+obj.color = {r:200, g:0, b:0};
+obj.diam = 20;
+obj.index = objarr.push(obj) - 1;
+
+obj = new xobj();
+obj.type='planet';
+obj.x=xmax/2-10;
+obj.y=ymax/2;
+obj.vel.y=-10;
+obj.vel.x=0;
+obj.mass = 100;
+//obj.color = {r:255, g:0, b:0};
+obj.index = objarr.push(obj) - 1;
+
+obj = new xobj();
+obj.type='planet';
+obj.x=xmax/2-50;
+obj.y=ymax/2;
+obj.vel.y=-50;
+obj.vel.x=0;
+obj.mass = 100;
+//obj.color = {r:255, g:0, b:0};
+obj.index = objarr.push(obj) - 1;
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+function getCanvasMousePos(e) {
+  var rect = canvas.getBoundingClientRect();
+  return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+canvas.addEventListener('mousemove', function(e) {
+  canvas_mouse_pos = getCanvasMousePos(e);
+}, false);
+
+
+
+
+function resize_canvas() {
+	canvas.width = $(window).width();
+	canvas.height = $(window).height();
+	xmax=canvas.width;
+	ymax=canvas.height;
+	//set center
+	//objarr[0].x = xmax/2;
+	//objarr[0].y = ymax/2;
+}
+$(window).resize(resize_canvas);
+
+world = new World();
+world.start_sim();
+
+
+$(window).on('keypress',function(e){
+    c = String.fromCharCode(e.which).toUpperCase();
+
+    if(c=='P') game_state = (game_state=='paused')? 'play':'paused';
+});
+
+
+document.addEventListener("keydown", function (e) {
+	e = e || window.event;
+	keystate[e.keyCode] = true;
+});
+document.addEventListener("keyup", function (e) {
+	e = e || window.event;
+  delete keystate[e.keyCode];
+});
+
+
+
+</script>
+
+
+
+
+
+
+</body>

@@ -26,20 +26,21 @@ class World
 		}
 
 		var obj = new Ship();
-		obj.type='player';
+		obj.type='ship';
 		obj.immobile=false;
 		obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
 		obj.mass = 100;
 		obj.density = 0;
 		obj.color = {r:0, g:100, b:200};
 		obj.diam = 20;
+		obj.shield_tot=100;
 		this.addObject(obj);
 		this.player1_obj = obj;
 		this.players.push(obj.id);
 
   }
 
-	addObject() {
+	addObject(obj) {
 		obj.id = this.objarr.push(obj)-1;
 	}
 
@@ -141,8 +142,8 @@ class World
 
   			//PERFORM COLLISION
   			if(!p1.no_collision && !p2.no_collision) {
-  				if(is_touching) {
-  					p1.collide(p2);
+  				if(is_touching) {		
+					p1.collide(p2);
   				}
   			} //END COLLISION CODE
   		}
