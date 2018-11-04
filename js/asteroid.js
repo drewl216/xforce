@@ -1,4 +1,4 @@
-class Asteroid extends PhysicsObj
+class Asteroid extends Obj
 {
   constructor(){
     super();
