@@ -76,7 +76,6 @@ class World
   				pobj.vel.y -= pobj.rot.y * BAKUP_SPEED;
   			}
   		}
-
   	}
 
 
@@ -203,7 +202,7 @@ class World
   	//DRAW EDGE OF LEVEL
   	context.beginPath();
   	context.lineWidth="6";
-    console.log(objarr[obj.index]);
+    console.log(this.player1_obj);
   	context.rect(-level_edge.x, -level_edge.y, level_edge.x*2, level_edge.y*2);
     context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
     context.stroke();
