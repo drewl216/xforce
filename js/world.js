@@ -7,12 +7,11 @@ class World
 	//this.playstartpos = []
 	this.player_qty = 2;
 	this.win_condition = "kills"; //(kills, elimination, points, capture, base_destroy)
-	this.
+	this.win_limit = 5;
+	this.respawn_timer = 5000; //ms
 	// this.players = 
 	//this.teams=
-	
-	respawn_timer = 5000; //ms
-	this.
+
   }
 
   load_world_objects(){
