@@ -79,7 +79,9 @@ collide(o2) {
 		var y1 = o1.y - o1.vel.y*step_size;
 		var x2 = o2.x - o2.vel.x*step_size;
 		var y2 = o2.y - o2.vel.y*step_size;
+		
 
+		
 		//if rolling back a full step won't help then forcibly move them apart on their normal vector (they're probably stuck on eachother)
 		var newdist = Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
 		if(newdist < min_dist) { //they're still collided even after backing up a step
@@ -186,7 +188,8 @@ collide(o2) {
 		var new_o1vel_V = new_o1velN_V.add(new_o1velT_V);
 		var new_o2vel_V = new_o2velN_V.add(new_o2velT_V);
 		//store back into our system
-
+		//Calculate Force/Impulse JAL
+		var total_change_in_vel = o1.vel.subtract(new_o1vel_V).length();
 		if(!o1.no_collision_movement) {
 			o1.vel.x = new_o1vel_V.x;
 			o1.vel.y = new_o1vel_V.y;
@@ -195,6 +198,41 @@ collide(o2) {
 			o2.vel.x = new_o2vel_V.x;
 			o2.vel.y = new_o2vel_V.y;
 		}
+	}
+	//Compute Damage to Ships //JAL
+	if(o1.type=='ship'){
+		var energy = o2.mass*total_change_in_vel*total_change_in_vel;
+		var damage = energy/10000000 - 10;
+		if(damage < 0) {damage = 0};
+		if(o1.shield+o1.health <= damage){
+			o1.kill();
+		}
+		else if(o1.shield<= damage) {
+			o1.health = o1.health + o1.shield - damage;
+			o1.shield = 0;
+		}
+		else{
+			o1.shield = o1.shield-damage;
+		}
+	console.log(o1.shield);	
+	}
+	
+	if(o2.type=='ship'){
+		var energy = o1.mass*o2.mass*total_change_in_vel*total_change_in_vel;
+		var damage = energy/10000000 - 10;
+		if(damage < 0) {damage = 0};
+		console.log("Damge is" + damage);
+		if(o2.shield+o2.health <= damage){
+			o2.kill();
+		}
+		else if(o2.shield<= damage) {
+			o2.health = o2.health + o2.shield - damage;
+			o2.shield = 0;
+		}
+		else{
+			o2.shield = o2.shield-damage;
+		}
+	console.log(o2.shield);	
 	}
 }; //end collision function
 

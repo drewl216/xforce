@@ -3,6 +3,7 @@ class Asteroid extends Obj
   constructor(){
     super();
     this.diam = 20;
+	this.type = "asteroid";
   }
 
   draw(){

@@ -1,41 +1,48 @@
 class World
 {
-  constructor(){
-    this.load_world_objects();
-	this.image = "/images/bg/star_bg.jpg";
-	// this.objarray = []
-	//this.playstartpos = []
-	this.player_qty = 2;
-	this.win_condition = "kills"; //(kills, elimination, points, capture, base_destroy)
-	this.win_limit = 5;
-	this.respawn_timer = 5000; //ms
-	// this.players =
-	//this.teams=
+	constructor(){
+		this.objarr = [];
+		this.players = [];
+
+		this.load_world_objects();
+		this.image = "/images/bg/star_bg.jpg";
+		// this.this.objarray = []
+		//this.playstartpos = []
+		this.player_qty = 2;
+		this.win_condition = "kills"; //(kills, elimination, points, capture, base_destroy)
+		this.win_limit = 5;
+		this.respawn_timer = 5000; //ms
+		// this.this.players =
+		//this.teams=
+
+	}
+
+	load_world_objects(){
+		//ADD ALL OTHER OBJECTS
+		for(var n=0; n<num_rand_planets; n++) {
+			var obj = new Asteroid();
+			obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
+			this.addObject(obj);
+		}
+
+		var obj = new Ship();
+		obj.type='ship';
+		obj.immobile=false;
+		obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
+		obj.mass = 100;
+		obj.density = 0;
+		obj.color = {r:0, g:100, b:200};
+		obj.diam = 20;
+		obj.shield=100;
+		this.addObject(obj);
+		this.player1_obj = obj;
+		this.players.push(obj.id);
 
   }
 
-  load_world_objects(){
-    //ADD ALL OTHER OBJECTS
-    for(var n=0; n<num_rand_planets; n++) {
-    	var obj = new Asteroid();
-    	obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
-    	obj.index = objarr.push(obj) - 1;
-    }
-
-    var obj = new Ship();
-    obj.type='player';
-    obj.immobile=false;
-    obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
-    obj.mass = 100;
-    obj.density = 0;
-    obj.color = {r:0, g:100, b:200};
-    obj.diam = 20;
-    obj.index = objarr.push(obj) - 1;
-    player1_obj = objarr[obj.index];
-    players.push(obj.index);
-
-
-  }
+	addObject(obj) {
+		obj.id = this.objarr.push(obj)-1;
+	}
 
   start_sim() {
   	this.sim_draw();
@@ -59,10 +66,10 @@ class World
   }
 
   sim_step() {
-    //APPLY MOVEMENT FORCES TO PLAYERS
-  	for(var i=0; i<players.length; i++) {
-  		var oid = players[i];
-  		var pobj = objarr[oid];
+    //APPLY MOVEMENT FORCES TO this.players
+  	for(var i=0; i<this.players.length; i++) {
+  		var oid = this.players[i];
+  		var pobj = this.objarr[oid];
   		if(pobj.control_scheme=="directional"){
   			if(keystate[LEFTKEY]) pobj.vel.x -= FORWARD_ACCEL*step_size;
   			if(keystate[RIGHTKEY]) pobj.vel.x += FORWARD_ACCEL*step_size;
@@ -79,7 +86,7 @@ class World
   					obj.y = pobj.y+ obj.diam*vect.y;
   					obj.vel.x = pobj.vel.x + BULLET_SPEED*vect.x;
   					obj.vel.y = pobj.vel.y + BULLET_SPEED*vect.y;
-  					objarr.push(obj);
+  					this.addObject(obj);
   					snd_bloip.play();
   				}
   			}
@@ -98,7 +105,7 @@ class World
   					obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
   					obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
   					obj.vel.y = pobj.vel.y + pobj.rot.y*BULLET_SPEED;
-  					objarr.push(obj);
+  					this.addObject(obj);
   					snd_bloip.play();
 
   					//accelerate backwards
@@ -112,21 +119,24 @@ class World
 
   	//APPLY FORCES TO RECALCULATE VELOCITY VECTORS
 
-  	//PERFORM COLLISSIONS AND CLEANUP
-  	for(var i=0; i<objarr.length; i++)
-  	{
-  		var p1 = objarr[i];
-  		if(!p1 || p1.disabled) continue; //this object no longer exists
-  //		if(p1.type=='bullet' && (Math.abs(p1.vel.x)+Math.abs(p1.vel.y)) < BULLET_SPEED*.8) { delete(objarr[i]); continue; }
 
-  		for(var j=i+1; j<objarr.length; j++)
+	
+	
+  	//PERFORM COLLISSIONS AND CLEANUP
+  	for(var i=0; i<this.objarr.length; i++)
+  	{
+  		var p1 = this.objarr[i];
+  		if(!p1 || p1.disabled) continue; //this object no longer exists
+  //		if(p1.type=='bullet' && (Math.abs(p1.vel.x)+Math.abs(p1.vel.y)) < BULLET_SPEED*.8) { delete(this.objarr[i]); continue; }
+
+  		for(var j=i+1; j<this.objarr.length; j++)
   		{
-  			var p2 = objarr[j];
+  			var p2 = this.objarr[j];
   			if(!p2 || p2.disabled) continue; //this object no longer exists
   			if(p1.type=='bullet' && p2.type=='bullet') continue; //they're both bullets
 
   			//remove old/slow bullets (they also get removed if they leave the screen)
-  //		if(p2.type=='bullet' && (Math.abs(p2.vel.x)+Math.abs(p2.vel.y)) < BULLET_SPEED*.8) { delete(objarr[j]); continue; }
+  //		if(p2.type=='bullet' && (Math.abs(p2.vel.x)+Math.abs(p2.vel.y)) < BULLET_SPEED*.8) { delete(this.objarr[j]); continue; }
 
   			dist = Math.sqrt( Math.pow((p1.x-p2.x), 2) + Math.pow((p1.y-p2.y), 2) );
   			min_dist = p1.diam/2 + p2.diam/2; //objects can't possibly be closer than this
@@ -135,21 +145,21 @@ class World
 
   			//PERFORM COLLISION
   			if(!p1.no_collision && !p2.no_collision) {
-  				if(is_touching) {
-  					p1.collide(p2);
+  				if(is_touching) {		
+					p1.collide(p2);
   				}
   			} //END COLLISION CODE
   		}
   	}
 
-  	//APPLY GRAVITY & OTHHER FORCES
-  	for(var i=0; i<objarr.length; i++)
+  	//APPLY GRAVITY & OTHER FORCES
+  	for(var i=0; i<this.objarr.length; i++)
   	{
-  		var p1 = objarr[i];
+  		var p1 = this.objarr[i];
   		if(!p1 || p1.disabled) continue; //this object no longer exists
-  		for(var j=i+1; j<objarr.length; j++)
+  		for(var j=i+1; j<this.objarr.length; j++)
   		{
-  			var p2 = objarr[j];
+  			var p2 = this.objarr[j];
   			if(!p2 || p2.disabled) continue; //this object no longer exists
   			if(p1.type=='bullet' && p2.type=='bullet') continue; //they're both bullets
 
@@ -185,15 +195,22 @@ class World
 
 
   	//ADVANCE EACH POINT
-  	for(var i=0; i<objarr.length; i++) {
-  		var p = objarr[i];
+  	for(var i=0; i<this.objarr.length; i++) {
+
+		var p = this.objarr[i];
   		if(!p || p.disabled) continue; //this point no longer exists
+		//RECHARGE SHIELD //JAL
+		if (p.type=="ship" && p.shield < p.shield_max) {
+			if (p.shield_max-p.shield >= p.shield_regen) {p.shield = p.shield + p.shield_regen;	}
+			else if(p.shield < p.shield_max && p.shield_max-p.shield <= p.shield_regen) {p.shield = p.shield_max};
+		console.log(p.shield);
+		}	
   		//update object position based on current velocity
   		p.x+=p.vel.x * step_size;
   		p.y+=p.vel.y * step_size;
   		if(do_edge_bounce) {
   			var out_of_bounds = (p.x>level_edge.x || p.x<-level_edge.x || p.y>level_edge.y || p.y<-level_edge.y);
-  			if(p.type=='bullet' && out_of_bounds) delete(objarr[i]);
+  			if(p.type=='bullet' && out_of_bounds) delete(this.objarr[i]);
   			if(out_of_bounds) {
   				if(p.x>level_edge.x) { p.x=level_edge.x; p.vel.x*=-1; }
   				if(p.x<-level_edge.x) { p.x=-level_edge.x; p.vel.x*=-1; }
@@ -209,12 +226,12 @@ class World
   sim_draw() {
     //scroll to new player position
   	//var wrapper = document.getElementById('canvasWrapper');
-  	var screen_pos_x = player1_obj.x - Math.round(xmax/2);
-  	var screen_pos_y = player1_obj.y - Math.round(ymax/2);
+  	var screen_pos_x = this.player1_obj.x - Math.round(xmax/2);
+  	var screen_pos_y = this.player1_obj.y - Math.round(ymax/2);
   	var screen_max_x = screen_pos_x + xmax;
   	var screen_max_y = screen_pos_y + ymax;
-  	//wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
-  	//wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
+  	//wrapper.scrollTop = this.player1_obj.x - Math.round(xmax/2);
+  	//wrapper.scrollLeft = this.player1_obj.y - Math.round(ymax/2);
 
   	//CLEAR OLD
   	if(clear_each_frame) context.clearRect(0, 0, canvas.width, canvas.height);
@@ -258,9 +275,9 @@ context.lineWidth="1";
 
 
   	//DRAW EACH OBJECT
-  	for(var i=0; i<objarr.length; i++) {
+  	for(var i=0; i<this.objarr.length; i++) {
   		//DRAW EACH POINT
-  		var obj = objarr[i];
+  		var obj = this.objarr[i];
   		if(!obj || obj.disabled) continue; //this point no longer exists
   		var objright = obj.x+obj.diam/2;
   		var objleft = obj.x-obj.diam/2;
