@@ -2,8 +2,9 @@
 
 const WebSocket = require('./ws/index.js');
 const Obj = require('../js/obj.js');
-
-
+const Util = require("../js/util.js");
+const Victor = require("../js/victor.min.js");
+const ServerMessage = require("../js/serverMessage.js");
 
 const wss = new WebSocket.Server({
 	port: 8080,
@@ -26,8 +27,6 @@ const wss = new WebSocket.Server({
 	 }
 });
 
-console.log(Obj);
-
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
@@ -38,17 +37,15 @@ wss.on('connection', function connection(ws) {
 	var objs = Array();
 	objs.push(new Obj());
 	objs.push(new Obj());
+	objs[0].id=0;
+	objs[1].id=1;
 
-	var json_objs = Array();
 
-	for (var i=0;i<objs.length;i++) {
-		json_objs.push(objs[i].toJson());
-	}
+	ws.send(ServerMessage.addObjects(objs));
+	ws.send(ServerMessage.setPlayerObject(1));
 
-	var encoded = JSON.stringify(json_objs);
-	ws.send(encoded);
-	ws.close();
+
+	objs.push(new Obj());
+	objs[2].id=2;
+	ws.send(ServerMessage.addObjects(Array(objs[2])));
 });
-
-
-

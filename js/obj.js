@@ -220,9 +220,30 @@ collide(o2) {
 		convert the object to JSON string
 		@Return json representation of this object
 	*/
-	toJson()
+	getToSerialize()
 	{
-		return JSON.stringify(this);
+
+		var toSerialize = {};
+		
+		toSerialize.id                             = this.id 
+		toSerialize.x                              = this.x
+		toSerialize.y                              = this.y
+		toSerialize.pos                            = this.pos 
+		toSerialize.vel                            = this.vel 
+		toSerialize.rot                            = this.rot 
+		toSerialize.rot_vel                        = this.rot_vel 
+		toSerialize.is_visible                     = this.is_visible 
+		toSerialize.color                          = this.color 
+		toSerialize.mass                           = this.mass 
+		toSerialize.net_force                      = this.net_force 
+		toSerialize.no_gravity                     = this.no_gravity
+		toSerialize.no_gravity_movement            = this.no_gravity_movement
+		toSerialize.no_collision                   = this.no_collision 
+		toSerialize.no_collision_movement          = this.no_collision_movement 
+		toSerialize.collision_type                 = this.collision_type 
+		toSerialize.collision_energy_loss_percent  = this.collision_energy_loss_percent 
+
+		return toSerialize;
 	}
 
 
@@ -230,14 +251,27 @@ collide(o2) {
 		create from a json version
 		@param string json_str a json encoded xobj
 	*/
-	static fromJson(json_str)
+	static unSerialize(object_parsed)
 	{
-		var object_parsed = JSON.parse(json_str);
-		var obj = new this();
-		for (var prop in object_parsed) {
-			if (obj.hasOwnProperty(prop)) {
-			obj[prop] = object_parsed[prop];}
-		}
+		var obj = new Obj();
+		
+		obj.id                             = object_parsed.id 
+		obj.x                              = object_parsed.x
+		obj.y                              = object_parsed.y
+		obj.pos                            = object_parsed.pos 
+		obj.vel                            = object_parsed.vel 
+		obj.rot                            = object_parsed.rot 
+		obj.rot_vel                        = object_parsed.rot_vel 
+		obj.is_visible                     = object_parsed.is_visible 
+		obj.color                          = object_parsed.color 
+		obj.mass                           = object_parsed.mass 
+		obj.net_force                      = object_parsed.net_force 
+		obj.no_gravity                     = object_parsed.no_gravity
+		obj.no_gravity_movement            = object_parsed.no_gravity_movement
+		obj.no_collision                   = object_parsed.no_collision 
+		obj.no_collision_movement          = object_parsed.no_collision_movement 
+		obj.collision_type                 = object_parsed.collision_type 
+		obj.collision_energy_loss_percent  = object_parsed.collision_energy_loss_percent 
 		return obj;
 	}
 
