@@ -1,49 +1,72 @@
-
 <!DOCTYPE HTML>
 
 <html>
-	<head>
-		<script type="text/javascript" src="js/obj.js"> </script>
-		<script type="text/javascript" src="js/util.js"> </script>
-		<script type="text/javascript" src="js/victor.min.js"></script>
-			
-		<script type = "text/javascript">
-			function WebSocketTest() {
-				
-				if ("WebSocket" in window) {
-					
-					// Let us open a web socket
-					var ws = new WebSocket("ws://localhost:8080");
-				
-					ws.onopen = function() {
-						
-						// Web Socket is connected, send data using send()
-						ws.send("Message to send");
-					};
-				
-					ws.onmessage = function (evt) { 
-						var encoded = JSON.parse(evt.data);
-						var objs = Array();
-						for (var i=0;i<encoded.length;i++) {
-							var o = Obj.fromJson(encoded[i]);
-							objs.push(o);
-							o.positionRandomly(0,0,100,100);
-						}
-					};
-				
-					ws.onclose = function() { 
-						
-						// websocket is closed.
-						alert("Connection is closed..."); 
-					};
-				} else {
-				  
-					// The browser doesn't support WebSocket
-				}
-			}
-		</script>
+<head>
+	<script type="text/javascript" src="js/obj.js"> </script>
+	<script type="text/javascript" src="js/util.js"> </script>
+	<script type="text/javascript" src="js/victor.min.js"></script>
+	<script type="text/javascript" src="js/serverMessage.js"></script>
 		
-	</head>
+	<script type = "text/javascript">
+	var objs = Array();
+	var playerObj;
+
+	function WebSocketTest() {
+		
+		if ("WebSocket" in window) {
+			
+			// Let us open a web socket
+			var ws = new WebSocket("ws://europa.apogeehost.com:8080");
+			//var ws = new WebSocket("ws://localhost:8080");
+		
+			ws.onopen = function() {
+				
+				// Web Socket is connected, send data using send()
+			};
+		
+			ws.onmessage = function (evt) { 
+				var msg = ServerMessage.parseServerMessage(evt.data,objs);
+
+				switch (msg.type) {
+					case "add":
+					{
+						for (var i=0;i<msg.objs.length;i++) {
+							console.log("Adding Object ID:"+msg.objs[i].id);
+							objs[msg.objs[i].id] = msg.objs[i];
+						}
+					} break;
+
+					case "update":
+					{
+						for (var i=0;i<msg.objs.length;i++) {
+							console.log("Updating Object:"+msg.objs[i].id);
+							objs[msg.objs[i].id].updateFromSerialize(msg.objs[i]);
+						}
+					} break;
+
+					case "setPlayerId":
+					{
+						console.log("Setting player id to"+msg.id);
+						playerObj = objs[msg.id];
+					} break;
+
+					//case z
+				}
+			};
+		
+			ws.onclose = function() { 
+
+				// websocket is closed.
+				console.log("Connection is closed..."); 
+			};
+		} else {
+		  
+			// The browser doesn't support WebSocket
+		}
+	}
+	</script>
+	
+</head>
 	
 	<body>
 		<div id = "sse">

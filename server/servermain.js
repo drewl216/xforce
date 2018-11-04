@@ -2,8 +2,9 @@
 
 const WebSocket = require('./ws/index.js');
 const Obj = require('../js/obj.js');
-
-
+const Util = require("../js/util.js");
+const Victor = require("../js/victor.min.js");
+const ServerMessage = require("../js/serverMessage.js");
 
 const wss = new WebSocket.Server({
 	port: 8080,
@@ -26,29 +27,38 @@ const wss = new WebSocket.Server({
 	 }
 });
 
-console.log(Obj);
+
+var objs = Array();
+var connections = Array();
 
 wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-  });
+	ws.on('message', function incoming(message) {
+	});
 
-
-
-	var objs = Array();
-	objs.push(new Obj());
-	objs.push(new Obj());
-
-	var json_objs = Array();
-
-	for (var i=0;i<objs.length;i++) {
-		json_objs.push(objs[i].toJson());
+	if (objs.length > 0) {
+		ws.send(ServerMessage.addObjects(objs));
 	}
 
-	var encoded = JSON.stringify(json_objs);
-	ws.send(encoded);
-	ws.close();
+	connections.push(ws);
+	objs.push(new Obj());
+	var newId = objs.length-1;
+	objs[newId].id=newId;
+
+	sendToAll(ServerMessage.addObjects(Array(objs[newId])));
+	ws.send(ServerMessage.setPlayerObject(1));
 });
 
+setInterval(function(){
+	if (objs.length > 0) {
+		var index = Util.rand(0,objs.length-1);
+		objs[index].x++;
+		sendToAll(ServerMessage.updateObjects(Array(objs[index])));
+	}
+},1000);
 
-
+function sendToAll(message)
+{
+	for (var i=0;i<connections.length;i++) {
+		connections[i].send(message);
+	}
+}
