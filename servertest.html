@@ -16,7 +16,8 @@
 		if ("WebSocket" in window) {
 			
 			// Let us open a web socket
-			var ws = new WebSocket("ws://localhost:8080");
+			var ws = new WebSocket("ws://europa.apogeehost.com:8080");
+			//var ws = new WebSocket("ws://localhost:8080");
 		
 			ws.onopen = function() {
 				
