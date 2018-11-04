@@ -33,6 +33,8 @@
 <!--NEW-->
 <img src = "images/bg/star_bg.jpg" id="bg" style="display:none;" />
 
+
+
 <div id='canvasWrapper' style='width:1024px; height: 768px; overflow: hidden;'>
 	<canvas id="myCanvas" width="1200" height="1200"></canvas>
 </div>
@@ -43,8 +45,12 @@
 var LEFTKEY = 37, UPKEY = 38, RIGHTKEY = 39, DOWNKEY = 40, FIREKEY = 32;
 var keystate = [];
 
-//NEW
+//NEW: image and sound loading
 var background = document.getElementById('bg');
+var snd_bloip = new Audio();
+snd_bloip.src = "audio/bloip.ogg";
+
+
 //MOVEMENT & FIRING
 var ROTATE_SPEED = 1.5;
 var FORWARD_ACCEL = 100;
@@ -199,28 +205,51 @@ function sim_step() {
 	for(var i=0; i<players.length; i++) {
 		oid = players[i];
 		pobj = objarr[oid];
+		if(pobj.control_scheme=="directional"){
+			if(keystate[LEFTKEY]) pobj.vel.x -= FORWARD_ACCEL*step_size;
+			if(keystate[RIGHTKEY]) pobj.vel.x += FORWARD_ACCEL*step_size;
+			if(keystate[UPKEY]) { pobj.vel.y -= FORWARD_ACCEL*step_size; }
+			if(keystate[DOWNKEY]) { pobj.vel.y += FORWARD_ACCEL*step_size; }
+			if(keystate[FIREKEY]) {
 
-		if(keystate[LEFTKEY]) pobj.rot.rotate(-1*ROTATE_SPEED*step_size);
-		if(keystate[RIGHTKEY]) pobj.rot.rotate(1*ROTATE_SPEED*step_size);
-		if(keystate[UPKEY]) { pobj.vel.x += pobj.rot.x*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*FORWARD_ACCEL*step_size; }
-		if(keystate[DOWNKEY]) { pobj.vel.x += pobj.rot.x*-1*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*-1*FORWARD_ACCEL*step_size; }
-		if(keystate[FIREKEY]) {
-
-			if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
-				pobj.last_fire_time = Date.now();
-				obj = new Bullet();
-				obj.x = pobj.x + pobj.rot.x*(pobj.diam+10);
-				obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
-				obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
-				obj.vel.y = pobj.vel.y + pobj.rot.y*BULLET_SPEED;
-				objarr.push(obj);
-
-				//accelerate backwards
-				pobj.vel.x -= pobj.rot.x * BAKUP_SPEED;
-				pobj.vel.y -= pobj.rot.y * BAKUP_SPEED;
+				if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
+					pobj.last_fire_time = Date.now();
+					obj = new Bullet();
+					vect = new Victor(pobj.vel.x, pobj.vel.y);
+					vect.norm();
+					obj.x = pobj.x + obj.diam*vect.x;
+					obj.y = pobj.y+ obj.diam*vect.y;
+					console.log(pobj.vel.norm);
+					obj.vel.x = pobj.vel.x + BULLET_SPEED*vect.x;
+					obj.vel.y = pobj.vel.y + BULLET_SPEED*vect.y;
+					objarr.push(obj);
+					snd_bloip.play();
+				}
 			}
 		}
+		else {
+			if(keystate[LEFTKEY]) pobj.rot.rotate(-1*ROTATE_SPEED*step_size);
+			if(keystate[RIGHTKEY]) pobj.rot.rotate(1*ROTATE_SPEED*step_size);
+			if(keystate[UPKEY]) { pobj.vel.x += pobj.rot.x*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*FORWARD_ACCEL*step_size; }
+			if(keystate[DOWNKEY]) { pobj.vel.x += pobj.rot.x*-1*FORWARD_ACCEL*step_size; pobj.vel.y += pobj.rot.y*-1*FORWARD_ACCEL*step_size; }
+			if(keystate[FIREKEY]) {
 
+				if(!pobj.last_fire_time || pobj.last_fire_time<(Date.now()-RATE_OF_FIRE_MS)) {
+					pobj.last_fire_time = Date.now();
+					obj = new Bullet();
+					obj.x = pobj.x + pobj.rot.x*(pobj.diam+10);
+					obj.y = pobj.y + pobj.rot.y*(pobj.diam+10);
+					obj.vel.x = pobj.vel.x + pobj.rot.x*BULLET_SPEED;
+					obj.vel.y = pobj.vel.y + pobj.rot.y*BULLET_SPEED;
+					objarr.push(obj);
+					snd_bloip.play();
+
+					//accelerate backwards
+					pobj.vel.x -= pobj.rot.x * BAKUP_SPEED;
+					pobj.vel.y -= pobj.rot.y * BAKUP_SPEED;
+				}
+			}
+		}			
 	}
 
 

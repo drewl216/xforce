@@ -2,6 +2,20 @@ class Ship extends PhysicsObj
 {
   constructor(){
     super();
+	this.shiptype = 'pod';
+	this.thrust = 100;
+	this.rot_speed = 0;
+	this.equipped = [0]  //(array) 
+	this.max_speed = 1000;
+	this.max_occupants = 1;
+	this.pilot_id = 0;
+    this.can_control = 1;
+	this.damage_impact = 0; //- reduces effectiveness of components
+	this.dockable = 1;
+	this.control_scheme = 'rotational'; //- Method of movement (rotational or directional)
+	this.value = 0;  //cost to the team
+	this.Description = "No description provided.";
+	this.scanner_range = 400;
   }
 
   draw(){

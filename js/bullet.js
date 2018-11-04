@@ -2,6 +2,7 @@ class Bullet extends PhysicsObj
 {
   constructor(){
     super();
+	this.id = 0;
     this.diam = 2;
     this.color = {r:255, g:0, b:0};
     this.mass = 1;
