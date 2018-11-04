@@ -204,17 +204,17 @@ collide(o2) {
 		var energy = o2.mass*total_change_in_vel*total_change_in_vel;
 		var damage = energy/10000000 - 10;
 		if(damage < 0) {damage = 0};
-		if(o1.shield_tot+o1.health <= damage){
+		if(o1.shield+o1.health <= damage){
 			o1.kill();
 		}
-		else if(o1.shield_tot<= damage) {
-			o1.health = o1.health + o1.shield_tot - damage;
-			o1.shield_tot = 0;
+		else if(o1.shield<= damage) {
+			o1.health = o1.health + o1.shield - damage;
+			o1.shield = 0;
 		}
 		else{
-			o1.shield_tot = o1.shield_tot-damage;
+			o1.shield = o1.shield-damage;
 		}
-	console.log(o1.shield_tot);	
+	console.log(o1.shield);	
 	}
 	
 	if(o2.type=='ship'){
@@ -222,17 +222,17 @@ collide(o2) {
 		var damage = energy/10000000 - 10;
 		if(damage < 0) {damage = 0};
 		console.log("Damge is" + damage);
-		if(o2.shield_tot+o2.health <= damage){
+		if(o2.shield+o2.health <= damage){
 			o2.kill();
 		}
-		else if(o2.shield_tot<= damage) {
-			o2.health = o2.health + o2.shield_tot - damage;
-			o2.shield_tot = 0;
+		else if(o2.shield<= damage) {
+			o2.health = o2.health + o2.shield - damage;
+			o2.shield = 0;
 		}
 		else{
-			o2.shield_tot = o2.shield_tot-damage;
+			o2.shield = o2.shield-damage;
 		}
-	console.log(o2.shield_tot);	
+	console.log(o2.shield);	
 	}
 }; //end collision function
 

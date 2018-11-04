@@ -17,8 +17,8 @@ class Ship extends Obj
 	this.Description = "No description provided.";
 	this.scanner_range = 400;
 	this.shield_max = 100;
-	this.shield_tot = 100;
-	this.shield_regen = .001;
+	this.shield = 100;
+	this.shield_regen = .01;
 	this.armor = 1;
 	this.health = 100;
 	this.type='ship';
@@ -47,8 +47,8 @@ class Ship extends Obj
 
     context.beginPath();
     context.arc(0,0, this.diam/2, 0, 2 * Math.PI, false);
-    context.lineWidth = 1;
-    context.strokeStyle = 'rgb('+Math.round(100)+','+Math.round(100)+','+Math.round(100)+')';//'#000000';  - The line arround the object
+    context.lineWidth = 2*this.shield/this.shield_max;
+    context.strokeStyle = 'rgb('+Math.round(255)+','+Math.round(255)+','+Math.round(255)+')';//'#000000';  - The line arround the object
     context.stroke();
 
     context.restore(); // restores the coordinate system back to (0,0)
@@ -56,6 +56,7 @@ class Ship extends Obj
   kill() {
 	var i = this.id;
 	this.disabled=true;
+	
 	
   }
 }

@@ -33,7 +33,7 @@ class World
 		obj.density = 0;
 		obj.color = {r:0, g:100, b:200};
 		obj.diam = 20;
-		obj.shield_tot=100;
+		obj.shield=100;
 		this.addObject(obj);
 		this.player1_obj = obj;
 		this.players.push(obj.id);
@@ -119,6 +119,9 @@ class World
 
   	//APPLY FORCES TO RECALCULATE VELOCITY VECTORS
 
+
+	
+	
   	//PERFORM COLLISSIONS AND CLEANUP
   	for(var i=0; i<this.objarr.length; i++)
   	{
@@ -149,7 +152,7 @@ class World
   		}
   	}
 
-  	//APPLY GRAVITY & OTHHER FORCES
+  	//APPLY GRAVITY & OTHER FORCES
   	for(var i=0; i<this.objarr.length; i++)
   	{
   		var p1 = this.objarr[i];
@@ -193,8 +196,15 @@ class World
 
   	//ADVANCE EACH POINT
   	for(var i=0; i<this.objarr.length; i++) {
-  		var p = this.objarr[i];
+
+		var p = this.objarr[i];
   		if(!p || p.disabled) continue; //this point no longer exists
+		//RECHARGE SHIELD //JAL
+		if (p.type=="ship" && p.shield < p.shield_max) {
+			if (p.shield_max-p.shield >= p.shield_regen) {p.shield = p.shield + p.shield_regen;	}
+			else if(p.shield < p.shield_max && p.shield_max-p.shield <= p.shield_regen) {p.shield = p.shield_max};
+		console.log(p.shield);
+		}	
   		//update object position based on current velocity
   		p.x+=p.vel.x * step_size;
   		p.y+=p.vel.y * step_size;
