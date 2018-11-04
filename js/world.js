@@ -2,7 +2,17 @@ class World
 {
   constructor(){
     this.load_world_objects();
-
+	this.image = "/images/bg/star_bg.jpg";
+	// this.objarray = []
+	//this.playstartpos = []
+	this.player_qty = 2;
+	this.win_condition = "kills"; //(kills, elimination, points, capture, base_destroy)
+	this.
+	// this.players = 
+	//this.teams=
+	
+	respawn_timer = 5000; //ms
+	this.
   }
 
   load_world_objects(){
@@ -13,19 +23,20 @@ class World
     	obj.mass=100;
     	obj.index = objarr.push(obj) - 1;
     }
-
-    var obj = new Ship();
-    obj.type='player';
-    obj.immobile=false;
-    obj.x=xmax-100;
-    obj.y=ymax-100;
-    obj.mass = 100;
-    obj.density = 0;
-    obj.color = {r:0, g:100, b:200};
-    obj.diam = 20;
-    obj.index = objarr.push(obj) - 1;
-    player1_obj = objarr[obj.index];
-    players.push(obj.index);
+	for (var n=0; n<this.player_qty; n++) {
+		var obj = new Ship();
+		obj.type='player';
+		obj.immobile=false;
+		obj.x=xmax-100;
+		obj.y=ymax-100;
+		obj.mass = 100;
+		obj.density = 0;
+		obj.color = {r:0, g:100, b:200};
+		obj.diam = 20;
+		obj.index = objarr.push(obj) - 1;
+		player1_obj = objarr[obj.index];
+		players.push(obj.index);
+	}
   }
 
   start_sim() {
