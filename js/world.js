@@ -24,7 +24,8 @@ class World
     obj.color = {r:0, g:100, b:200};
     obj.diam = 20;
     obj.index = objarr.push(obj) - 1;
-    player1_obj = objarr[obj.index];
+    this.player1_obj = objarr[obj.index];
+    console.log("initially" + this.player1_obj)
     players.push(obj.index);
   }
 
@@ -179,10 +180,8 @@ class World
   sim_draw() {
   	//scroll to new player position
   	//var wrapper = document.getElementById('canvasWrapper');
-  	screen_pos_x = player1_obj.x - Math.round(xmax/2);
-  	screen_pos_y = player1_obj.y - Math.round(ymax/2);
-  	//wrapper.scrollTop = player1_obj.x - Math.round(xmax/2);
-  	//wrapper.scrollLeft = player1_obj.y - Math.round(ymax/2);
+  	screen_pos_x = this.player1_obj.x - Math.round(xmax/2);
+  	screen_pos_y = this.player1_obj.y - Math.round(ymax/2);
 
   	//save the default transformation matrix
   	context.save(); //push()
@@ -204,6 +203,7 @@ class World
   	//DRAW EDGE OF LEVEL
   	context.beginPath();
   	context.lineWidth="6";
+    console.log(objarr[obj.index]);
   	context.rect(-level_edge.x, -level_edge.y, level_edge.x*2, level_edge.y*2);
     context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
     context.stroke();

@@ -84,15 +84,14 @@ var cursor_show_coordinates = true;
 var objarr = [];
 var players = [];
 
-var num_rand_planets = 300;
+var num_rand_planets = 1;
 
 //CREATE THE CANVAS OBJECT
 var canvas=document.getElementById("myCanvas");
 var context=canvas.getContext("2d");
 
-var player1_obj = null;
-var screen_pos_x = null;
-var screen_pos_y = null;
+var screen_pos_x;
+var screen_pos_y;
 
 /*******************
 ADD OBJECTS TO FIELD
