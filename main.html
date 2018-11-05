@@ -16,11 +16,12 @@
 <script src="js/victor.min.js"></script>
 
 <script src="js/obj.js"></script>
+<script src="js/obj_collision.js"></script>
+<script src="js/player.js"></script>
 <script src="js/ship.js"></script>
 <script src="js/asteroid.js"></script>
 <script src="js/projectile.js"></script>
 
-<script src="js/player.js"></script>
 <script src="js/world.js"></script>
 <script src="js/util.js"></script>
 
@@ -86,7 +87,7 @@ var cursor_show_coordinates = true;
 
 
 
-var num_rand_planets = 30;
+var num_rand_planets = 100;
 
 //CREATE THE CANVAS OBJECT
 var canvas=document.getElementById("myCanvas");
@@ -108,10 +109,10 @@ ADD OBJECTS TO FIELD
 obj = new xobj();
 obj.type='nucleus';
 obj.immobile=true;
-obj.no_gravity=false;
-obj.no_gravity_movement=true;
-obj.no_collision=false;
-obj.no_collision_movement=true;
+obj.do_gravity=true;
+obj.do_gravity_movement=false;
+obj.do_collision=true;
+obj.do_collision_movement=false;
 obj.x=xmax/2+20;
 obj.y=ymax/2;
 obj.mass = 1000;
@@ -174,6 +175,7 @@ function resize_canvas() {
 }
 $(window).resize(resize_canvas);
 
+resize_canvas();
 world = new World();
 world.start_sim();
 

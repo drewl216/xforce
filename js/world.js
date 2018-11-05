@@ -1,3 +1,4 @@
+
 class World
 {
 	constructor(){
@@ -29,7 +30,7 @@ class World
 		obj.type='ship';
 		obj.immobile=false;
 		obj.positionRandomly(-level_edge.x,-level_edge.y,level_edge.x,level_edge.y);
-		obj.mass = 100;
+		obj.mass = 10;
 		obj.density = 0;
 		obj.color = {r:0, g:100, b:200};
 		obj.diam = 20;
@@ -122,7 +123,7 @@ class World
 
 	
 	
-  	//PERFORM COLLISSIONS AND CLEANUP
+  	//PERFORM COLLISIONS AND CLEANUP
   	for(var i=0; i<this.objarr.length; i++)
   	{
   		var p1 = this.objarr[i];
@@ -144,9 +145,9 @@ class World
   			is_touching = ((dist - (p1.diam/2) - (p2.diam/2)) <= 0);
 
   			//PERFORM COLLISION
-  			if(!p1.no_collision && !p2.no_collision) {
+  			if(p1.do_collision && p2.do_collision) {
   				if(is_touching) {		
-					p1.collide(p2);
+						p1.collide(p2);
   				}
   			} //END COLLISION CODE
   		}
@@ -174,16 +175,16 @@ class World
 
   			//CALCULATE GRAVITY FORCES
         var grav_force = 0;
-  			if(p1.no_gravity || p2.no_gravity) grav_force=0;
+  			if(!p1.do_gravity && !p2.do_gravity) grav_force=0;
   			else { grav_force = grav_const*p2.mass*p1.mass / Math.pow(use_dist,2); }
 
   			if(!p1.immobile) {
-  				var total_force = (p1.no_gravity_movement? 0:grav_force);
+  				var total_force = (!p1.do_gravity_movement? 0:grav_force);
   				p1.vel.x += (uvect_i*total_force) / p1.mass * step_size;
   				p1.vel.y += (uvect_j*total_force) / p1.mass * step_size;
   			}
   			if(!p2.immobile) {
-  				var total_force = (p2.no_gravity_movement? 0:grav_force);
+  				var total_force = (!p2.do_gravity_movement? 0:grav_force);
   				//if(Math.abs(total_force) > .00001) {
   				p2.vel.x -= (uvect_i*total_force) / p2.mass * step_size;
   				p2.vel.y -= (uvect_j*total_force) / p2.mass * step_size;
@@ -203,7 +204,6 @@ class World
 		if (p.type=="ship" && p.shield < p.shield_max) {
 			if (p.shield_max-p.shield >= p.shield_regen) {p.shield = p.shield + p.shield_regen;	}
 			else if(p.shield < p.shield_max && p.shield_max-p.shield <= p.shield_regen) {p.shield = p.shield_max};
-		console.log(p.shield);
 		}	
   		//update object position based on current velocity
   		p.x+=p.vel.x * step_size;
@@ -232,6 +232,8 @@ class World
   	var screen_max_y = screen_pos_y + ymax;
   	//wrapper.scrollTop = this.player1_obj.x - Math.round(xmax/2);
   	//wrapper.scrollLeft = this.player1_obj.y - Math.round(ymax/2);
+ 	  var p1_pos_from_tl = this.player1_obj.get_pos_from_top_left();
+
 
   	//CLEAR OLD
   	if(clear_each_frame) context.clearRect(0, 0, canvas.width, canvas.height);
@@ -247,12 +249,15 @@ class World
   	//DRAW BACKGROUND
   	context.save(); //push()
   	//TRANSLATE BY USER POSIITON
-  	var level_width_plus_half_screen = 2*level_edge.x-(.5*canvas.width);
-  	var level_height_plus_half_screen = 2*level_edge.y-(.5*canvas.height);
-  	//percent_x =
-  	context.translate(-screen_pos_x, -screen_pos_y);
-  	context.drawImage(background,-level_edge.x-(.5*canvas.width),-level_edge.y-(.5*canvas.height), level_edge.x*2+canvas.width,level_edge.y*2+canvas.height);
+  	var image_pan_speed = .1;
+  	var require_image_width = canvas.width + 2*level_edge.x * image_pan_speed;
+		var require_image_height = canvas.height + 2*level_edge.y * image_pan_speed;
+  	context.translate(-p1_pos_from_tl.x*image_pan_speed, -p1_pos_from_tl.y*image_pan_speed);
+  	context.drawImage(background, 0, 0, require_image_width, require_image_height);
+  	//Staic background : context.drawImage(background, 0, 0);
   	context.restore(); //pop()
+
+
 
 
   	context.save(); //push()
@@ -265,10 +270,10 @@ class World
   	context.beginPath();
   	context.lineWidth="6";
   	context.rect(-level_edge.x, -level_edge.y, level_edge.x*2, level_edge.y*2);
-   context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
+		context.strokeStyle = 'rgb('+100+','+100+','+100+')';//'#000000';  - The line arround the object
     context.stroke();
     //reset line width to 1
-context.lineWidth="1";
+		context.lineWidth="1";
 
 
 
@@ -292,13 +297,17 @@ context.lineWidth="1";
 
   	//SHOW COORDINATES
   	if(cursor_show_coordinates) {
-  	  context.font = '10pt Calibri';
-  	  context.fillStyle = '#000';
+			context.font = '10pt Calibri';
+  	  context.fillStyle = '#CCC';
   	  context.fillText(canvas_mouse_pos.x + ',' + canvas_mouse_pos.y, 10, 20);
-  	  context.fillText( Math.round((Date.now()-start_time)/1000.00) + " (Real Time)", 10, 40);
-  	  context.fillText( Math.round(full_cnt*step_size) + "(Sim Time)", 10, 60);
-  	  context.fillText( frame_cnt_per_second + " FPS", 10, 80);
+  	  context.fillText(Math.round(p1_pos_from_tl.x) + ',' + Math.round(p1_pos_from_tl.y), 10, 40);
+  	  context.fillText( Math.round((Date.now()-start_time)/1000.00) + " (Real Time)", 10, 60);
+  	  context.fillText( Math.round(full_cnt*step_size) + "(Sim Time)", 10, 80);
+  	  context.fillText( frame_cnt_per_second + " FPS", 10, 100);
   	}
+  	
+ 
+  	
 
 
   	return true;
